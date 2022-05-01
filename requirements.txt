@@ -37,11 +37,24 @@ executing==0.8.3
 fastjsonschema==2.15.3
     # via nbformat
 ipykernel==6.13.0
-    # via notebook
+    # via
+    #   ipywidgets
+    #   jupyter
+    #   jupyter-console
+    #   notebook
+    #   qtconsole
 ipython==8.3.0
-    # via ipykernel
+    # via
+    #   ipykernel
+    #   ipywidgets
+    #   jupyter-console
 ipython-genutils==0.2.0
-    # via notebook
+    # via
+    #   ipywidgets
+    #   notebook
+    #   qtconsole
+ipywidgets==7.7.0
+    # via jupyter
 jedi==0.18.1
     # via ipython
 jinja2==3.1.2
@@ -50,19 +63,28 @@ jinja2==3.1.2
     #   notebook
 jsonschema==4.4.0
     # via nbformat
+jupyter==1.0.0
+    # via -r requirements.in
 jupyter-client==7.3.0
     # via
     #   ipykernel
+    #   jupyter-console
     #   nbclient
     #   notebook
+    #   qtconsole
+jupyter-console==6.4.3
+    # via jupyter
 jupyter-core==4.10.0
     # via
     #   jupyter-client
     #   nbconvert
     #   nbformat
     #   notebook
+    #   qtconsole
 jupyterlab-pygments==0.2.2
     # via nbconvert
+jupyterlab-widgets==1.1.0
+    # via ipywidgets
 markupsafe==2.1.1
     # via
     #   jinja2
@@ -76,9 +98,12 @@ mistune==0.8.4
 nbclient==0.6.0
     # via nbconvert
 nbconvert==6.5.0
-    # via notebook
+    # via
+    #   jupyter
+    #   notebook
 nbformat==5.3.0
     # via
+    #   ipywidgets
     #   nbclient
     #   nbconvert
     #   notebook
@@ -89,11 +114,21 @@ nest-asyncio==1.5.5
     #   nbclient
     #   notebook
 notebook==6.4.11
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   jupyter
+    #   widgetsnbextension
+numpy==1.22.3
+    # via
+    #   -r requirements.in
+    #   pandas
 packaging==21.3
     # via
     #   ipykernel
     #   nbconvert
+    #   qtpy
+pandas==1.4.2
+    # via -r requirements.in
 pandocfilters==1.5.0
     # via nbconvert
 parso==0.8.3
@@ -103,7 +138,9 @@ pickleshare==0.7.5
 prometheus-client==0.14.1
     # via notebook
 prompt-toolkit==3.0.29
-    # via ipython
+    # via
+    #   ipython
+    #   jupyter-console
 psutil==5.9.0
     # via ipykernel
 pure-eval==0.2.2
@@ -113,13 +150,19 @@ pycparser==2.21
 pygments==2.12.0
     # via
     #   ipython
+    #   jupyter-console
     #   nbconvert
+    #   qtconsole
 pyparsing==3.0.8
     # via packaging
 pyrsistent==0.18.1
     # via jsonschema
 python-dateutil==2.8.2
-    # via jupyter-client
+    # via
+    #   jupyter-client
+    #   pandas
+pytz==2022.1
+    # via pandas
 pywin32==303
     # via jupyter-core
 pywinpty==2.0.5
@@ -128,6 +171,11 @@ pyzmq==22.3.0
     # via
     #   jupyter-client
     #   notebook
+    #   qtconsole
+qtconsole==5.3.0
+    # via jupyter
+qtpy==2.0.1
+    # via qtconsole
 send2trash==1.8.0
     # via notebook
 six==1.16.0
@@ -152,6 +200,7 @@ traitlets==5.1.1
     # via
     #   ipykernel
     #   ipython
+    #   ipywidgets
     #   jupyter-client
     #   jupyter-core
     #   matplotlib-inline
@@ -159,12 +208,15 @@ traitlets==5.1.1
     #   nbconvert
     #   nbformat
     #   notebook
+    #   qtconsole
 wcwidth==0.2.5
     # via prompt-toolkit
 webencodings==0.5.1
     # via
     #   bleach
     #   tinycss2
+widgetsnbextension==3.6.0
+    # via ipywidgets
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
