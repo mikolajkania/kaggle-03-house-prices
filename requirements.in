@@ -1,6 +1,7 @@
 jupyter==1.0.0
 notebook==6.4.11
 pandas==1.4.2
+matplotlib==3.5.2
 numpy==1.22.3
 dvc==2.10.2
 # awscli==1.23.4
