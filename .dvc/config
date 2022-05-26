@@ -1,0 +1,7 @@
+[core]
+    analytics = false
+    check_update = false
+    remote = newsletter
+['remote "kaggle03"']
+    url = s3://resources-dvc/kaggle03/
+    credentialpath = /mnt/c/Users/mikol/.aws/credentials

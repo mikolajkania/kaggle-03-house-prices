@@ -1,0 +1,9 @@
+stages:
+  prepare:
+    cmd: python src/pipeline/prepare.py params.yaml
+    deps:
+      - data/raw
+      - src/data
+      - src/pipeline/prepare.py
+    outs:
+      - data/dvc/
