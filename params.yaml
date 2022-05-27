@@ -1,3 +1,7 @@
 prepare:
   data:
-    path: data/raw/train.csv
+    input:
+      path: data/raw/train.csv
+    dvc:
+      dir: data/dvc/
+      path: data/dvc/train_dict.pkl
