@@ -1,16 +1,18 @@
 import os
 import sys
+
 import yaml
-import pickle
 
 sys.path.extend(os.pardir)
 
-from src.data.handlers import CSVHandler, TrainingDataHandler
+from src.features.vectorizes import StringEncoder
+from src.features.columns import MissingDataHandler
+from src.data.handlers import CSVLoader, TrainingDataHandler
 
 # PARAMS
 
 params_path = sys.argv[1]
-params = yaml.safe_load(open(params_path))['prepare']['data']
+params = yaml.safe_load(open(params_path))
 
 # INIT
 
@@ -18,12 +20,16 @@ os.makedirs(params['dvc']['dir'], exist_ok=True)
 
 # CODE
 
-csv_data = CSVHandler(params['input']['path'])
-all_df = csv_data.load()
+csv_data = CSVLoader(params['prepare']['data']['input']['path'])
+X_train, y_train = csv_data.load()
 
-y_train = all_df['SalePrice']
-all_df.drop(columns=['Id', 'SalePrice'], axis=1)
-X_train = all_df.copy()
+missing_data = MissingDataHandler()
+missing_data.drop_na_columns(X_train)
+mode = params['prepare']['preproc']['missing']
+missing_data.fill(mode, X_train)
+
+str_encoder = StringEncoder()
+X_train = str_encoder.encode(data=X_train)
 
 train_data = TrainingDataHandler(params['dvc']['path'])
 train_data.write(X_train, y_train)

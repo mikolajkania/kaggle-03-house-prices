@@ -2,6 +2,8 @@ prepare:
   data:
     input:
       path: data/raw/train.csv
-    dvc:
-      dir: data/dvc/
-      path: data/dvc/train_dict.pkl
+  preproc:
+    missing: freq
+dvc:
+  dir: data/dvc/
+  path: data/dvc/train_dict.pkl

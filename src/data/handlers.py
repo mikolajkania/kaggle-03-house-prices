@@ -4,15 +4,15 @@ import pickle
 import pandas as pd
 
 
-class CSVHandler:
+class CSVLoader:
 
     def __init__(self, path: str) -> None:
         super().__init__()
         self.path = path
 
-    def load(self) -> pd.DataFrame:
-        train_df: pd.DataFrame = pd.read_csv(self.path)
-        return train_df
+    def load(self) -> tuple[pd.DataFrame, pd.Series]:
+        data_df: pd.DataFrame = pd.read_csv(self.path)
+        return data_df.drop(columns=['Id', 'SalePrice'], axis=1), data_df['SalePrice']
 
 
 class TrainingDataHandler:

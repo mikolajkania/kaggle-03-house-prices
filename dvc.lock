@@ -1,0 +1,21 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/pipeline/prepare.py params.yaml
+    deps:
+    - path: data/raw
+      md5: 482b064ffaf5a3f9c9123e7d553d3486.dir
+      size: 960660
+      nfiles: 5
+    - path: src/data
+      md5: fa74cd354e50f078d6f46c1d641d776d.dir
+      size: 2820
+      nfiles: 2
+    - path: src/pipeline/prepare.py
+      md5: 01f5b51d228ad53f82a7e08cef070cca
+      size: 829
+    outs:
+    - path: data/dvc/
+      md5: 7f6b2ef211b2af1f5c1eb4ef276d98be.dir
+      size: 782280
+      nfiles: 1
