@@ -4,6 +4,11 @@ prepare:
       path: data/raw/train.csv
   preproc:
     missing: freq
+  train:
+    name: LinearRegression
 dvc:
-  dir: data/dvc/
-  path: data/dvc/train_dict.pkl
+  auto:
+    dir: data/dvc/
+    path: data/dvc/train_dict.pkl
+  metrics:
+    path: models/metrics.json

@@ -60,6 +60,7 @@ class OutliersHandler:
 
 # TODO should some columns be just boolean?
 # TODO should some columns be replaced with bins?
+# TODO scale features?
 class ColumnTransformer:
     pass
 

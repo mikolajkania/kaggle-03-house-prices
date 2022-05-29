@@ -12,10 +12,51 @@ stages:
       size: 2820
       nfiles: 2
     - path: src/pipeline/prepare.py
-      md5: 01f5b51d228ad53f82a7e08cef070cca
-      size: 829
+      md5: b506941ac2eb47382fd1552134fa84f2
+      size: 1029
     outs:
     - path: data/dvc/
-      md5: 7f6b2ef211b2af1f5c1eb4ef276d98be.dir
-      size: 782280
+      md5: e5b14fce623486cd0ed3dea5ca9af751.dir
+      size: 780157
       nfiles: 1
+  prepare-train-evaluate:
+    cmd: python src/pipeline/train.py params.yaml
+    deps:
+    - path: data/raw
+      md5: 482b064ffaf5a3f9c9123e7d553d3486.dir
+      size: 960660
+      nfiles: 5
+    - path: src/data
+      md5: fa74cd354e50f078d6f46c1d641d776d.dir
+      size: 2820
+      nfiles: 2
+    - path: src/pipeline/train.py
+      md5: 0181fc96177bd327a9e4ff9823a9b25f
+      size: 1488
+    outs:
+    - path: data/dvc/
+      md5: e5b14fce623486cd0ed3dea5ca9af751.dir
+      size: 780157
+      nfiles: 1
+  train:
+    cmd: python src/pipeline/process.py params.yaml
+    deps:
+    - path: data/raw
+      md5: 482b064ffaf5a3f9c9123e7d553d3486.dir
+      size: 960660
+      nfiles: 5
+    - path: src/data
+      md5: fa74cd354e50f078d6f46c1d641d776d.dir
+      size: 2820
+      nfiles: 2
+    - path: src/pipeline/process.py
+      md5: 46fc33befb238051f21e3a00ff348ca6
+      size: 1322
+    outs:
+    - path: data/dvc/
+      md5: e5b14fce623486cd0ed3dea5ca9af751.dir
+      size: 780157
+      nfiles: 1
+    - path: models/metrics.json
+      md5: d74140e3c8132cd54337e7b6ebf2b5e6
+      size: 129

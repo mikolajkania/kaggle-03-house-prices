@@ -1,9 +1,12 @@
 stages:
-  prepare:
-    cmd: python src/pipeline/prepare.py params.yaml
+  train:
+    cmd: python src/pipeline/process.py params.yaml
     deps:
       - data/raw
       - src/data
-      - src/pipeline/prepare.py
+      - src/pipeline/process.py
     outs:
       - data/dvc/
+    metrics:
+      - models/metrics.json:
+          cache: false
