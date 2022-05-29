@@ -3,8 +3,7 @@ stages:
     cmd: python src/pipeline/process.py params.yaml
     deps:
       - data/raw
-      - src/data
-      - src/pipeline/process.py
+      - src
     outs:
       - data/dvc/
     metrics:

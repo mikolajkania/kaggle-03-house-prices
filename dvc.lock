@@ -45,13 +45,10 @@ stages:
       md5: 482b064ffaf5a3f9c9123e7d553d3486.dir
       size: 960660
       nfiles: 5
-    - path: src/data
-      md5: fa74cd354e50f078d6f46c1d641d776d.dir
-      size: 2820
-      nfiles: 2
-    - path: src/pipeline/process.py
-      md5: 46fc33befb238051f21e3a00ff348ca6
-      size: 1322
+    - path: src
+      md5: 991d7df4f7857f0018a01653534725a9.dir
+      size: 16189
+      nfiles: 15
     outs:
     - path: data/dvc/
       md5: e5b14fce623486cd0ed3dea5ca9af751.dir
