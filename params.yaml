@@ -3,7 +3,7 @@ prepare:
     input:
       path: data/raw/train.csv
   preproc:
-    missing: freq
+    missing: most_frequent
   train:
     name: LinearRegression
 dvc:

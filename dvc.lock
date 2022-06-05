@@ -39,21 +39,21 @@ stages:
       size: 780157
       nfiles: 1
   train:
-    cmd: python src/pipeline/process.py params.yaml
+    cmd: python src/pipeline/run.py params.yaml
     deps:
     - path: data/raw
       md5: 482b064ffaf5a3f9c9123e7d553d3486.dir
       size: 960660
       nfiles: 5
     - path: src
-      md5: 991d7df4f7857f0018a01653534725a9.dir
-      size: 16189
+      md5: 3b1a848117e2f24fb1e0a80ce0dd6403.dir
+      size: 16846
       nfiles: 15
     outs:
     - path: data/dvc/
-      md5: e5b14fce623486cd0ed3dea5ca9af751.dir
-      size: 780157
-      nfiles: 1
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
     - path: models/metrics.json
-      md5: d74140e3c8132cd54337e7b6ebf2b5e6
-      size: 129
+      md5: ff520c15440b5343c379ac5de4e83ea3
+      size: 124

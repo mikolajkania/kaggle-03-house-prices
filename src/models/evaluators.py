@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 
 from sklearn.base import RegressorMixin
@@ -28,6 +30,11 @@ class ModelEvaluator:
             'rmse_train': rmse_train,
             'rmse_test': rmse_val
         }
+
+    @staticmethod
+    def save_metrics(path: str, metrics: dict):
+        with open(path, 'w') as f:
+            f.write(json.dumps(metrics))
 
     def kaggle_submission(self):
         pass

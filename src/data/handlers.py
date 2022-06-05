@@ -10,12 +10,12 @@ class CSVLoader:
         super().__init__()
         self.path = path
 
-    def load(self) -> tuple[pd.DataFrame, pd.Series]:
-        data_df: pd.DataFrame = pd.read_csv(self.path)
-        return data_df.drop(columns=['Id', 'SalePrice'], axis=1), data_df['SalePrice']
+    def load(self) -> pd.DataFrame:
+        data: pd.DataFrame = pd.read_csv(self.path)
+        return data
 
 
-class TrainingDataHandler:
+class TrainingDataPersister:
     def __init__(self, path: str) -> None:
         super().__init__()
         self.path = path
@@ -25,9 +25,9 @@ class TrainingDataHandler:
             data = pickle.load(f)
         return data['X'], data['y']
 
-    def write(self, X: pd.DataFrame, y: pd.Series):
+    def write(self, data: pd.DataFrame, y: pd.Series):
         train_data = {
-            'X': X,
+            'X': data,
             'y': y
         }
 

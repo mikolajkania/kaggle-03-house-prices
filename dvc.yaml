@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: python src/pipeline/process.py params.yaml
+    cmd: python src/pipeline/run.py params.yaml
     deps:
       - data/raw
       - src
