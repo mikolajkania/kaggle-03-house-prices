@@ -4,6 +4,7 @@ prepare:
       path: data/raw/train.csv
   preproc:
     missing: most_frequent
+    corr_threshold: none
   train:
     name: LinearRegression
 dvc:
