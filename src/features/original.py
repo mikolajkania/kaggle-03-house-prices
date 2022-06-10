@@ -61,9 +61,30 @@ class MissingDataHandler:
 
 
 class OutliersHandler:
-    @staticmethod
-    def remove_outliers(data: pd.DataFrame):
-        pass
+
+    def __init__(self):
+        self.outliers = dict()
+
+    def fit(self, data: pd.DataFrame):
+        for col in data.columns:
+            col_std = data[col].std()
+            col_mean = data[col].mean()
+            cut_off = col_std * 3
+
+            self.outliers[col] = {}
+            self.outliers[col]['lower'], self.outliers[col]['upper'] = col_mean - cut_off, col_mean + cut_off
+
+    def transform(self, data: pd.DataFrame):
+        for col in data.columns:
+            lower = self.outliers[col]['lower']
+            upper = self.outliers[col]['upper']
+
+            skew_before = data[col].skew()
+            data[col] = np.where(data[col] < lower, lower, data[col])
+            data[col] = np.where(data[col] > upper, upper, data[col])
+            skew_after = data[col].skew()
+
+            print(f'Skew before={skew_before}, and after={skew_after}')
 
 
 # TODO should some columns be just boolean?

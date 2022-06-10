@@ -9,7 +9,7 @@ from src.models.train import ModelHandler
 from src.features.splitters import DataSplitter
 from src.models.evaluators import ModelEvaluator
 from src.features.vectorizes import CategoricalEncoder
-from src.features.original import MissingDataHandler, CorrelationHandler
+from src.features.original import MissingDataHandler, CorrelationHandler, OutliersHandler
 from src.data.handlers import CSVLoader
 
 # PARAMS
@@ -41,8 +41,14 @@ missing_data.fill(X_val)
 missing_data.drop_high_na_columns(X_train)
 missing_data.drop_high_na_columns(X_val)
 
-# using X & y to be close to EDA results
-correlation = CorrelationHandler(mode=params['prepare']['preproc']['corr_threshold'], data=X, y=y)
+# TODO fit + transform? what with
+if params['prepare']['preproc']['outliers_removal']:
+    outliers = OutliersHandler()
+    outliers.fit(X_train)
+    outliers.transform(X_train)
+    outliers.transform(X_val)
+
+correlation = CorrelationHandler(mode=params['prepare']['preproc']['corr_threshold'], data=X_train, y=y_train)
 correlation.handle(X_train, X_val)
 
 model = ModelHandler('LinearRegression')

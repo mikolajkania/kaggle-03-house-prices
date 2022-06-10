@@ -46,8 +46,8 @@ stages:
       size: 960660
       nfiles: 5
     - path: src
-      md5: 98a694e0f893bd825039f3aef9b7e9b5.dir
-      size: 18142
+      md5: 43914d0a4cb9b4701f6f390cc3c69e6c.dir
+      size: 19875
       nfiles: 15
     outs:
     - path: data/dvc/
@@ -55,5 +55,5 @@ stages:
       size: 0
       nfiles: 0
     - path: models/metrics.json
-      md5: ff520c15440b5343c379ac5de4e83ea3
-      size: 124
+      md5: 4bd0d57bdec40d05ba7affe931b1f090
+      size: 127

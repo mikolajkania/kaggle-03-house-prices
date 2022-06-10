@@ -5,6 +5,7 @@ prepare:
   preproc:
     missing: most_frequent
     corr_threshold: none
+    outliers_removal: True
   train:
     name: LinearRegression
 dvc:
