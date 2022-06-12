@@ -3,6 +3,7 @@ import pandas as pd
 
 from scipy.stats import boxcox
 from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
 
 
 # Pearson correlation
@@ -90,9 +91,22 @@ class OutliersHandler:
 
 # TODO should some columns be just boolean?
 # TODO should some columns be replaced with bins?
-# TODO scale features?
-class ColumnTransformer:
+# TODO should some columns be joined?
+class FeatureTransformer:
     pass
+
+
+class FeatureScaler:
+
+    def __init__(self):
+        self.min_max_scaler = StandardScaler()
+
+    def fit(self, data: pd.DataFrame):
+        self.min_max_scaler.fit(data)
+
+    def transform(self, train: pd.DataFrame, val: pd.DataFrame):
+        train[:] = self.min_max_scaler.transform(train)
+        val[:] = self.min_max_scaler.transform(val)
 
 
 class DistributionTransformer:

@@ -9,7 +9,8 @@ from src.models.train import ModelHandler
 from src.features.splitters import DataSplitter
 from src.models.evaluators import ModelEvaluator
 from src.features.encoders import CategoricalEncoder
-from src.features.original import MissingDataHandler, CorrelationHandler, OutliersHandler, DistributionTransformer
+from src.features.original import MissingDataHandler, CorrelationHandler, OutliersHandler, DistributionTransformer, \
+    FeatureScaler
 from src.data.handlers import CSVLoader
 
 # PARAMS
@@ -49,6 +50,10 @@ if params['prepare']['preproc']['outliers_removal']:
 
 correlation = CorrelationHandler(mode=params['prepare']['preproc']['corr_threshold'], data=X_train, y=y_train)
 correlation.transform(X_train, X_val)
+
+scaler = FeatureScaler()
+scaler.fit(X_train)
+scaler.transform(X_train, X_val)
 
 target_transform = params['prepare']['preproc']['target_transform']
 if target_transform['enabled']:
