@@ -85,7 +85,7 @@ class OutliersHandler:
             data[col] = np.where(data[col] > upper, upper, data[col])
             skew_after = data[col].skew()
 
-            print(f'Skew before={skew_before}, and after={skew_after}')
+            print(f'[Outliers removal] For {col}: skew before={skew_before}, and after={skew_after}')
 
 
 # TODO should some columns be just boolean?
@@ -98,4 +98,8 @@ class ColumnTransformer:
 class DistributionTransformer:
     @staticmethod
     def transform(data: pd.Series, lmbda: float):
-        return boxcox(x=data, lmbda=lmbda)
+        skew_before = data.skew()
+        transformed_data = boxcox(x=data, lmbda=lmbda)
+        skew_after = pd.Series(transformed_data).skew()
+        print(f'[Target distribution] For {data.name}: skew before={skew_before}, and after={skew_after}')
+        return transformed_data

@@ -16,13 +16,13 @@ class ModelEvaluator:
         y_pred_val = model.predict(X_val)
 
         r2_train = model.score(X_train, y_train)
-        print(f'R2 score on training set: {r2_train}')
+        print(f'[R2 score] Training set: {r2_train}')
         r2_val = model.score(X_val, y_val)
-        print(f'R2 score on validation set: {r2_val}')
+        print(f'[R2 score] Validation set: {r2_val}')
         rmse_train = mean_squared_error(y_train, y_pred, squared=False)
-        print(f'RMSE predictions: {rmse_train}')
+        print(f'[RMSE] Training set: {rmse_train}')
         rmse_val = mean_squared_error(y_val, y_pred_val, squared=False)
-        print(f'RMSE validation: {rmse_val}')
+        print(f'[RMSE] Validation set: {rmse_val}')
 
         return {
             'r2_train': r2_train,
