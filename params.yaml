@@ -6,6 +6,9 @@ prepare:
     missing: most_frequent
     corr_threshold: none
     outliers_removal: True
+    target_transform:
+      enabled: True
+      lambda: 0
   train:
     name: LinearRegression
 dvc:

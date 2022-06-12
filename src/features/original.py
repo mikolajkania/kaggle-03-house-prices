@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+from scipy.stats import boxcox
 from sklearn.impute import SimpleImputer
 
 
@@ -18,7 +19,7 @@ class CorrelationHandler:
     def drop_na_columns(self):
         self.corr_data.drop(columns=['Id', 'SalePrice'], axis=1)
 
-    def handle(self, train: pd.DataFrame, val: pd.DataFrame) -> None:
+    def transform(self, train: pd.DataFrame, val: pd.DataFrame) -> None:
         if self.mode == 'none':
             pass
         elif self.mode == 'no_corr':
@@ -94,6 +95,7 @@ class ColumnTransformer:
     pass
 
 
-# TODO explore options to change distribution of variables within column
 class DistributionTransformer:
-    pass
+    @staticmethod
+    def transform(data: pd.Series, lmbda: float):
+        return boxcox(x=data, lmbda=lmbda)

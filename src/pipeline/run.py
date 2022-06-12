@@ -9,7 +9,7 @@ from src.models.train import ModelHandler
 from src.features.splitters import DataSplitter
 from src.models.evaluators import ModelEvaluator
 from src.features.encoders import CategoricalEncoder
-from src.features.original import MissingDataHandler, CorrelationHandler, OutliersHandler
+from src.features.original import MissingDataHandler, CorrelationHandler, OutliersHandler, DistributionTransformer
 from src.data.handlers import CSVLoader
 
 # PARAMS
@@ -49,7 +49,13 @@ if params['prepare']['preproc']['outliers_removal']:
     outliers.transform(X_val)
 
 correlation = CorrelationHandler(mode=params['prepare']['preproc']['corr_threshold'], data=X_train, y=y_train)
-correlation.handle(X_train, X_val)
+correlation.transform(X_train, X_val)
+
+# TODO from param
+target_transform = params['prepare']['preproc']['target_transform']
+if target_transform['enabled']:
+    y_train = DistributionTransformer.transform(data=y_train, lmbda=target_transform['lambda'])
+    y_val = DistributionTransformer.transform(data=y_val, lmbda=target_transform['lambda'])
 
 model = ModelHandler('LinearRegression')
 model.fit(X_train, y_train)
@@ -57,3 +63,4 @@ model.fit(X_train, y_train)
 evaluator = ModelEvaluator()
 metrics_dict = evaluator.metrics(model.get(), X_train, y_train, X_val, y_val)
 evaluator.save_metrics(path=params['dvc']['metrics']['path'], metrics=metrics_dict)
+print(metrics_dict)

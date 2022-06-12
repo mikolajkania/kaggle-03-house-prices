@@ -28,7 +28,7 @@ class ModelEvaluator:
             'r2_train': r2_train,
             'r2_val': r2_val,
             'rmse_train': rmse_train,
-            'rmse_test': rmse_val
+            'rmse_val': rmse_val
         }
 
     @staticmethod
