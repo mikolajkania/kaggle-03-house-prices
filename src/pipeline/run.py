@@ -41,7 +41,6 @@ missing_data.fill(X_val)
 missing_data.drop_high_na_columns(X_train)
 missing_data.drop_high_na_columns(X_val)
 
-# TODO fit + transform? what with
 if params['prepare']['preproc']['outliers_removal']:
     outliers = OutliersHandler()
     outliers.fit(X_train)
@@ -51,7 +50,6 @@ if params['prepare']['preproc']['outliers_removal']:
 correlation = CorrelationHandler(mode=params['prepare']['preproc']['corr_threshold'], data=X_train, y=y_train)
 correlation.transform(X_train, X_val)
 
-# TODO from param
 target_transform = params['prepare']['preproc']['target_transform']
 if target_transform['enabled']:
     y_train = DistributionTransformer.transform(data=y_train, lmbda=target_transform['lambda'])
