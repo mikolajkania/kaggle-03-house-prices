@@ -8,7 +8,7 @@ sys.path.extend(os.pardir)
 from src.models.train import ModelHandler
 from src.features.splitters import DataSplitter
 from src.models.evaluators import ModelEvaluator
-from src.features.vectorizes import CategoricalEncoder
+from src.features.encoders import CategoricalEncoder
 from src.features.original import MissingDataHandler, CorrelationHandler, OutliersHandler
 from src.data.handlers import CSVLoader
 
