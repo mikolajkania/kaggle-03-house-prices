@@ -59,6 +59,8 @@ target_transform = params['prepare']['preproc']['target_transform']
 if target_transform['enabled']:
     y_train = DistributionTransformer.transform(data=y_train, lmbda=target_transform['lambda'])
     y_val = DistributionTransformer.transform(data=y_val, lmbda=target_transform['lambda'])
+    DistributionTransformer.transform_df(data=X_train, lmbda=target_transform['lambda'])
+    DistributionTransformer.transform_df(data=X_val, lmbda=target_transform['lambda'])
 
 model = ModelHandler('LinearRegression')
 model.fit(X_train, y_train)

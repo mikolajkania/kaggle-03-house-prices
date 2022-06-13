@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from scipy.stats import boxcox
+from scipy.special import boxcox1p
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 
 # Pearson correlation
@@ -99,21 +99,29 @@ class FeatureTransformer:
 class FeatureScaler:
 
     def __init__(self):
-        self.min_max_scaler = StandardScaler()
+        # using MinMaxScaler instead of StandardScaler to work with DistributionTransformer
+        # it needs positive values
+        self.scalar = MinMaxScaler()
 
     def fit(self, data: pd.DataFrame):
-        self.min_max_scaler.fit(data)
+        self.scalar.fit(data)
 
     def transform(self, train: pd.DataFrame, val: pd.DataFrame):
-        train[:] = self.min_max_scaler.transform(train)
-        val[:] = self.min_max_scaler.transform(val)
+        train[:] = self.scalar.transform(train)
+        val[:] = self.scalar.transform(val)
 
 
 class DistributionTransformer:
     @staticmethod
     def transform(data: pd.Series, lmbda: float):
         skew_before = data.skew()
-        transformed_data = boxcox(x=data, lmbda=lmbda)
+        # using this special value as ordinary boxcox required positive data only (not even 0s)
+        transformed_data = boxcox1p(data, lmbda)
         skew_after = pd.Series(transformed_data).skew()
         print(f'[Target distribution] For {data.name}: skew before={skew_before}, and after={skew_after}')
         return transformed_data
+
+    @staticmethod
+    def transform_df(data: pd.DataFrame, lmbda: float):
+        for col in data.columns:
+            data[col] = DistributionTransformer.transform(data[col], lmbda)
