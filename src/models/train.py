@@ -18,6 +18,9 @@ class ModelHandler:
     def fit(self, data: pd.DataFrame, y: pd.Series):
         self._model.fit(data, y)
 
+    def predict(self, data: pd.DataFrame):
+        return self._model.predict(data)
+
     def get(self):
         return self._model
 

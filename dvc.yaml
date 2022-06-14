@@ -7,5 +7,10 @@ stages:
     outs:
       - data/dvc/
     metrics:
-      - models/metrics.json:
+      - models/metrics-train.json:
+          cache: false
+  kaggle:
+    cmd: python src/pipeline/submission.py params.yaml
+    metrics:
+      - models/metrics-final.json:
           cache: false

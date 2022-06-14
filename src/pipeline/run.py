@@ -24,8 +24,8 @@ os.makedirs(params['dvc']['auto']['dir'], exist_ok=True)
 
 # CODE
 
-csv_data = CSVLoader(params['prepare']['data']['input']['path'])
-all_df = csv_data.load()
+train_csv = CSVLoader(params['prepare']['data']['train']['path'])
+all_df = train_csv.load()
 
 y = all_df['SalePrice']
 X = all_df.drop(columns=['Id', 'SalePrice'], axis=1)
@@ -34,37 +34,45 @@ splitter = DataSplitter()
 X_train, X_val, y_train, y_val = splitter.split(X, y, 0.75)
 
 category_encoder = CategoricalEncoder()
-category_encoder.encode(train=X_train, val=X_val)
+category_encoder.fit(data=X_train)
+category_encoder.transform(data=X_train)
+category_encoder.transform(data=X_val)
 
 missing_data = MissingDataHandler(mode=params['prepare']['preproc']['missing'], data=X_train)
-missing_data.fill(X_train)
-missing_data.fill(X_val)
-missing_data.drop_high_na_columns(X_train)
-missing_data.drop_high_na_columns(X_val)
+missing_data.transform(data=X_train)
+missing_data.transform(data=X_val)
+missing_data.drop_high_na_columns(data=X_train)
+missing_data.drop_high_na_columns(data=X_val)
 
 if params['prepare']['preproc']['outliers_removal']:
     outliers = OutliersHandler()
-    outliers.fit(X_train)
-    outliers.transform(X_train)
-    outliers.transform(X_val)
+    outliers.fit(data=X_train)
+    outliers.transform(data=X_train, verbose=False)
+    outliers.transform(data=X_val)
 
 correlation = CorrelationHandler(mode=params['prepare']['preproc']['corr_threshold'], data=X_train, y=y_train)
-correlation.transform(X_train, X_val)
+correlation.transform(data=X_train)
+correlation.transform(data=X_val)
 
 scaler = FeatureScaler()
 scaler.fit(X_train)
-scaler.transform(X_train, X_val)
+scaler.transform(data=X_train)
+scaler.transform(data=X_val)
 
 target_transform = params['prepare']['preproc']['target_transform']
 if target_transform['enabled']:
-    y_train = DistributionTransformer.transform(data=y_train, lmbda=target_transform['lambda'])
-    y_val = DistributionTransformer.transform(data=y_val, lmbda=target_transform['lambda'])
-    DistributionTransformer.transform_df(data=X_train, lmbda=target_transform['lambda'])
+    DistributionTransformer.transform_df(data=X_train, lmbda=target_transform['lambda'], verbose=False)
     DistributionTransformer.transform_df(data=X_val, lmbda=target_transform['lambda'])
 
 model = ModelHandler('LinearRegression')
 model.fit(X_train, y_train)
 
 evaluator = ModelEvaluator()
-metrics_dict = evaluator.metrics(model.get(), X_train, y_train, X_val, y_val)
-evaluator.save_metrics(path=params['dvc']['metrics']['path'], metrics=metrics_dict)
+r2_train, rmsle_train = evaluator.metrics(model.get(), X_train, y_train)
+r2_val, rmsle_val = evaluator.metrics(model.get(), X_val, y_val)
+evaluator.save_metrics(path=params['dvc']['metrics']['train']['path'], metrics={
+    'r2_train': r2_train,
+    'r2_val': r2_val,
+    'rmsle_train': rmsle_train,
+    'rmsle_val': rmsle_val
+})

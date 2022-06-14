@@ -20,24 +20,21 @@ class CorrelationHandler:
     def drop_na_columns(self):
         self.corr_data.drop(columns=['Id', 'SalePrice'], axis=1)
 
-    def transform(self, train: pd.DataFrame, val: pd.DataFrame) -> None:
+    def transform(self, data: pd.DataFrame) -> None:
         if self.mode == 'none':
             pass
         elif self.mode == 'no_corr':
-            self._drop_below_weak_correlation(train, val)
+            self._drop_below_weak_correlation(data)
         else:
             raise Exception(f'Not valid correlation mode={self.mode}')
 
-    def _drop_below_weak_correlation(self, train: pd.DataFrame, val: pd.DataFrame) -> None:
+    def _drop_below_weak_correlation(self, data: pd.DataFrame) -> None:
         corr = self.corr_data.corr()
         below_weak_corr_cols = corr[abs(corr['SalePrice']) <= 0.3].index
         print(f'Dropping columns: {below_weak_corr_cols}')
 
-        train.drop(columns=below_weak_corr_cols, axis=1, inplace=True)
-        train.reset_index(drop=True, inplace=True)
-
-        val.drop(columns=below_weak_corr_cols, axis=1, inplace=True)
-        val.reset_index(drop=True, inplace=True)
+        data.drop(columns=below_weak_corr_cols, axis=1, inplace=True)
+        data.reset_index(drop=True, inplace=True)
 
     def _drop_below_moderate_correlation(self) -> None:
         pass
@@ -52,7 +49,7 @@ class MissingDataHandler:
         self.imputer = SimpleImputer(strategy=mode, missing_values=np.NAN)
         self.imputer.fit(data)
 
-    def fill(self, data: pd.DataFrame):
+    def transform(self, data: pd.DataFrame):
         data[:] = self.imputer.transform(data)
 
     @staticmethod
@@ -76,7 +73,7 @@ class OutliersHandler:
             self.outliers[col] = {}
             self.outliers[col]['lower'], self.outliers[col]['upper'] = col_mean - cut_off, col_mean + cut_off
 
-    def transform(self, data: pd.DataFrame):
+    def transform(self, data: pd.DataFrame, verbose=False):
         for col in data.columns:
             lower = self.outliers[col]['lower']
             upper = self.outliers[col]['upper']
@@ -86,7 +83,8 @@ class OutliersHandler:
             data[col] = np.where(data[col] > upper, upper, data[col])
             skew_after = data[col].skew()
 
-            print(f'[Outliers removal] For {col}: skew before={skew_before}, and after={skew_after}')
+            if verbose:
+                print(f'[Outliers removal] For {col}: skew before={skew_before}, and after={skew_after}')
 
 
 # TODO should some columns be just boolean?
@@ -106,22 +104,22 @@ class FeatureScaler:
     def fit(self, data: pd.DataFrame):
         self.scalar.fit(data)
 
-    def transform(self, train: pd.DataFrame, val: pd.DataFrame):
-        train[:] = self.scalar.transform(train)
-        val[:] = self.scalar.transform(val)
+    def transform(self, data: pd.DataFrame):
+        data[:] = self.scalar.transform(data)
 
 
 class DistributionTransformer:
     @staticmethod
-    def transform(data: pd.Series, lmbda: float):
+    def transform(data: pd.Series, lmbda: float, verbose=False):
         skew_before = data.skew()
         # using this special value as ordinary boxcox required positive data only (not even 0s)
         transformed_data = boxcox1p(data, lmbda)
         skew_after = pd.Series(transformed_data).skew()
-        print(f'[Target distribution] For {data.name}: skew before={skew_before}, and after={skew_after}')
+        if verbose:
+            print(f'[Target distribution] For {data.name}: skew before={skew_before}, and after={skew_after}')
         return transformed_data
 
     @staticmethod
-    def transform_df(data: pd.DataFrame, lmbda: float):
+    def transform_df(data: pd.DataFrame, lmbda: float, verbose=False):
         for col in data.columns:
-            data[col] = DistributionTransformer.transform(data[col], lmbda)
+            data[col] = DistributionTransformer.transform(data[col], lmbda, verbose)

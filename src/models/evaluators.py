@@ -3,36 +3,23 @@ import json
 import pandas as pd
 
 from sklearn.base import RegressorMixin
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_log_error
 
 
 class ModelEvaluator:
 
     @staticmethod
-    def metrics(model: RegressorMixin, X_train: pd.DataFrame, y_train: pd.Series,
-                X_val: pd.DataFrame, y_val: pd.Series) -> dict:
+    def metrics(model: RegressorMixin, data: pd.DataFrame, y: pd.Series):
+        y_pred = model.predict(data)
 
-        y_pred = model.predict(X_train)
-        y_pred_val = model.predict(X_val)
+        r2 = model.score(data, y)
+        rmsle = mean_squared_log_error(y, y_pred, squared=False)
 
-        r2_train = model.score(X_train, y_train)
-        print(f'[R2 score] Training set: {r2_train}')
-        r2_val = model.score(X_val, y_val)
-        print(f'[R2 score] Validation set: {r2_val}')
-        rmse_train = mean_squared_error(y_train, y_pred, squared=False)
-        print(f'[RMSE] Training set: {rmse_train}')
-        rmse_val = mean_squared_error(y_val, y_pred_val, squared=False)
-        print(f'[RMSE] Validation set: {rmse_val}')
-
-        return {
-            'r2_train': r2_train,
-            'r2_val': r2_val,
-            'rmse_train': rmse_train,
-            'rmse_val': rmse_val
-        }
+        return r2, rmsle
 
     @staticmethod
     def save_metrics(path: str, metrics: dict):
+        print(metrics)
         with open(path, 'w') as f:
             f.write(json.dumps(metrics))
 

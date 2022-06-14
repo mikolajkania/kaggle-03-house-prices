@@ -1,7 +1,9 @@
 prepare:
   data:
-    input:
+    train:
       path: data/raw/train.csv
+    predict:
+      path: data/raw/test.csv
   preproc:
     missing: most_frequent
     corr_threshold: none
@@ -16,4 +18,7 @@ dvc:
     dir: data/dvc/
     path: data/dvc/train_dict.pkl
   metrics:
-    path: models/metrics.json
+    train:
+      path: models/metrics-train.json
+    final:
+      path: models/metrics-final.json

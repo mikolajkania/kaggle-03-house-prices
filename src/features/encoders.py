@@ -6,15 +6,18 @@ from sklearn.preprocessing import OrdinalEncoder
 
 class CategoricalEncoder:
 
-    def encode(self, train: pd.DataFrame, val: pd.DataFrame):
-        str_cols = self._get_string_columns(train)
+    def __init__(self):
+        self.str_cols = dict()
+        self.encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=np.NAN)
+
+    def fit(self, data: pd.DataFrame):
+        self.str_cols = self._get_string_columns(data)
 
         # will create special values for unknown features in test set
-        encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=np.NAN)
-        encoder.fit(train[str_cols])
+        self.encoder.fit(data[self.str_cols])
 
-        train[str_cols] = encoder.transform(train[str_cols])
-        val[str_cols] = encoder.transform(val[str_cols])
+    def transform(self, data: pd.DataFrame):
+        data[self.str_cols] = self.encoder.transform(data[self.str_cols])
 
     @staticmethod
     def _get_string_columns(data: pd.DataFrame):
