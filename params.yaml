@@ -12,7 +12,7 @@ prepare:
       enabled: True
       lambda: 0
   train:
-    name: LinearRegression
+    name: RandomForestRegressor
 dvc:
   auto:
     dir: data/dvc/

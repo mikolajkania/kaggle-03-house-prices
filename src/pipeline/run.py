@@ -64,7 +64,7 @@ if target_transform['enabled']:
     DistributionTransformer.transform_df(data=X_train, lmbda=target_transform['lambda'], verbose=False)
     DistributionTransformer.transform_df(data=X_val, lmbda=target_transform['lambda'])
 
-model = ModelHandler('LinearRegression')
+model = ModelHandler(params['prepare']['train']['name'])
 model.fit(X_train, y_train)
 
 evaluator = ModelEvaluator()

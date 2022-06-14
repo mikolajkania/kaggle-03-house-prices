@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 
 
@@ -7,6 +8,8 @@ class ModelResolver:
     def get(name: str):
         if name == 'LinearRegression':
             return LinearRegression()
+        elif name == 'RandomForestRegressor':
+            return RandomForestRegressor()
 
 
 class ModelHandler:
