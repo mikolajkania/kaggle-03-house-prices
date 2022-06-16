@@ -7,7 +7,7 @@ sys.path.extend(os.pardir)
 
 from src.data.handlers import CSVLoader
 from src.models.train import ModelHandler
-from src.models.helpers import preprocess, extract_preproc_config
+from src.models.preproc import preprocess, extract_preproc_config
 from src.features.splitters import DataSplitter
 from src.models.evaluators import ModelEvaluator
 
