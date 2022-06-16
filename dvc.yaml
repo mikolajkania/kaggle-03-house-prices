@@ -1,16 +1,12 @@
 stages:
   train:
-    cmd: python src/pipeline/run.py params.yaml
+    cmd:
+      - python src/pipeline/run.py params.yaml
+      - python src/pipeline/submission.py params.yaml
     deps:
-      - data/raw
       - src
     outs:
       - data/dvc/
     metrics:
       - models/metrics-train.json:
-          cache: false
-  kaggle:
-    cmd: python src/pipeline/submission.py params.yaml
-    metrics:
-      - models/metrics-final.json:
           cache: false

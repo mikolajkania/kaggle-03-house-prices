@@ -6,11 +6,9 @@ prepare:
       path: data/raw/test.csv
   preproc:
     missing: most_frequent
-    corr_threshold: none
+    corr_threshold: null
     outliers_removal: True
-    target_transform:
-      enabled: True
-      lambda: 0
+    distribution_lambda: 0
   train:
     name: RandomForestRegressor
 dvc:

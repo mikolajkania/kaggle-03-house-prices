@@ -39,27 +39,25 @@ stages:
       size: 780157
       nfiles: 1
   train:
-    cmd: python src/pipeline/run.py params.yaml
+    cmd:
+    - python src/pipeline/run.py params.yaml
+    - python src/pipeline/submission.py params.yaml
     deps:
-    - path: data/raw
-      md5: 482b064ffaf5a3f9c9123e7d553d3486.dir
-      size: 960660
-      nfiles: 5
     - path: src
-      md5: dcd324f8d0cfe3130b40b3de409dd9aa.dir
-      size: 25272
-      nfiles: 16
+      md5: 27080ebcc673405f64bd7146a17857ab.dir
+      size: 28366
+      nfiles: 18
     outs:
     - path: data/dvc/
       md5: d751713988987e9331980363e24189ce.dir
       size: 0
       nfiles: 0
     - path: models/metrics-train.json
-      md5: 4d5754030b663aa9660c4b0bdfc702e3
-      size: 130
+      md5: 0f3090f02c92e9d9b14c7ea269c417a5
+      size: 214
   kaggle:
     cmd: python src/pipeline/submission.py params.yaml
     outs:
     - path: models/metrics-final.json
-      md5: 415718abdeee2f08c47e9168eb3e6272
+      md5: 78344fb18d53e07fad5455230d94f652
       size: 69
