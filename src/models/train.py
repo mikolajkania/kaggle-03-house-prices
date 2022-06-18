@@ -8,16 +8,9 @@ class ModelResolver:
 
     @staticmethod
     def of(name: str):
-        return ModelHandler(ModelResolver._basic(name), ModelResolver._final(name), ModelResolver._param_grid(name))
-
-    @staticmethod
-    def _basic(name: str):
-        if name == 'LinearRegression':
-            return LinearRegression()
-        elif name == 'RandomForestRegressor':
-            return RandomForestRegressor()
-        else:
-            raise Exception(f'Unsupported model name={name}')
+        return ModelHandler(ModelResolver._final(name),
+                            ModelResolver._grid_estimator(name),
+                            ModelResolver._grid_param(name))
 
     @staticmethod
     def _final(name: str):
@@ -31,7 +24,16 @@ class ModelResolver:
             raise Exception(f'Unsupported model name={name}')
 
     @staticmethod
-    def _param_grid(name: str) -> dict:
+    def _grid_estimator(name: str):
+        if name == 'LinearRegression':
+            return LinearRegression()
+        elif name == 'RandomForestRegressor':
+            return RandomForestRegressor()
+        else:
+            raise Exception(f'Unsupported model name={name}')
+
+    @staticmethod
+    def _grid_param(name: str) -> dict:
         if name == 'RandomForestRegressor':
             return {
                 'n_estimators': list(range(100, 2000, 100)),
@@ -45,10 +47,10 @@ class ModelResolver:
 
 class ModelHandler:
 
-    def __init__(self, basic_estimator, final_estimator, param_grid: dict):
-        self.basic_estimator = basic_estimator
+    def __init__(self, final_estimator, grid_estimator, grid_param: dict):
         self.final_estimator = final_estimator
-        self.param_grid = param_grid
+        self.grid_estimator = grid_estimator
+        self.grid_param = grid_param
 
     def fit(self, data: pd.DataFrame, y: pd.Series):
         self.final_estimator.fit(data, y)
@@ -58,7 +60,7 @@ class ModelHandler:
 
     def grid_search(self, data: pd.DataFrame, y: pd.Series) -> None:
         print('Grid search started')
-        grid = GridSearchCV(self.basic_estimator, self.param_grid, cv=4, n_jobs=6, verbose=10)
+        grid = GridSearchCV(self.grid_estimator, self.grid_param, cv=4, n_jobs=6, verbose=10)
         found = grid.fit(data, y)
         print(f'Best cv score={found.best_score_}')
         print(f'Best cv params={found.best_params_}')
