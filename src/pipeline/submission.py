@@ -6,7 +6,7 @@ import yaml
 sys.path.extend(os.pardir)
 
 from src.data.handlers import CSVLoader
-from src.models.train import ModelHandler
+from src.models.train import ModelResolver
 from src.models.evaluators import ModelEvaluator
 from src.models.preproc import preprocess, extract_preproc_config
 
@@ -17,10 +17,10 @@ params = yaml.safe_load(open(params_path))
 
 # CODE
 
-train_csv = CSVLoader(params['prepare']['data']['train']['path'])
+train_csv = CSVLoader(params['train']['data']['train']['path'])
 all_df = train_csv.load()
 
-predict_csv = CSVLoader(params['prepare']['data']['predict']['path'])
+predict_csv = CSVLoader(params['train']['data']['predict']['path'])
 predict_df = predict_csv.load()
 X_pred = predict_df.drop(columns=['Id'], axis=1)
 
@@ -30,7 +30,7 @@ X = all_df.drop(columns=['Id', 'SalePrice'], axis=1)
 preproc_config = extract_preproc_config(params)
 preprocess(X, X_pred, y, preproc_config)
 
-model = ModelHandler(params['prepare']['train']['name'])
+model = ModelResolver.of(params['train']['estimator']['name'])
 model.fit(X, y)
 
 evaluator = ModelEvaluator()
