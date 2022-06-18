@@ -1,4 +1,6 @@
 import pandas as pd
+import xgboost as xgb
+
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV
@@ -21,6 +23,8 @@ class ModelResolver:
         elif name == 'RandomForestRegressor':
             return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt',
                                          n_estimators=1800, random_state=42)
+        elif name == 'XGBRegressor':
+            return xgb.XGBRegressor(seed=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
@@ -30,12 +34,16 @@ class ModelResolver:
             return LinearRegression()
         elif name == 'RandomForestRegressor':
             return RandomForestRegressor()
+        elif name == 'XGBRegressor':
+            return xgb.XGBRegressor(seed=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
     @staticmethod
     def _grid_param(name: str) -> dict:
-        if name == 'RandomForestRegressor':
+        if name == 'LinearRegression':
+            return {}
+        elif name == 'RandomForestRegressor':
             return {
                 'n_estimators': list(range(100, 2000, 100)),
                 'max_depth': list(range(10, 20, 1)),
@@ -44,6 +52,10 @@ class ModelResolver:
                 'max_features': ['sqrt', 'log2', 1.0],
                 'bootstrap': [True, False]
             }
+        elif name == 'XGBRegressor':
+            return {}
+        else:
+            raise Exception(f'Unsupported model name={name}')
 
 
 class ModelHandler:

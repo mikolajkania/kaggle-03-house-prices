@@ -10,7 +10,7 @@ train:
     outliers_removal: True
     distribution_lambda: 0
   estimator:
-    name: RandomForestRegressor
+    name: XGBRegressor
     grid: False
 dvc:
   auto:

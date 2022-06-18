@@ -232,6 +232,7 @@ numpy==1.22.3
     #   pandas
     #   scikit-learn
     #   scipy
+    #   xgboost
 packaging==21.3
     # via
     #   dvc
@@ -340,6 +341,7 @@ scipy==1.8.1
     # via
     #   -r requirements.in
     #   scikit-learn
+    #   xgboost
 scmrepo==0.0.19
     # via dvc
 send2trash==1.8.0
@@ -417,6 +419,8 @@ webencodings==0.5.1
     #   tinycss2
 widgetsnbextension==3.6.0
     # via ipywidgets
+xgboost==1.6.1
+    # via -r requirements.in
 xmltodict==0.12.0
     # via python-benedict
 yarl==1.7.2
