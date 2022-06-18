@@ -12,10 +12,10 @@ from src.features.original import MissingDataHandler, CorrelationHandler, Outlie
 
 def extract_preproc_config(params: dict):
     return {
-        'missing_imputer': params['prepare']['preproc']['missing'],
-        'outliers_removal': params['prepare']['preproc']['outliers_removal'],
-        'corr_threshold_removal': params['prepare']['preproc']['corr_threshold'],
-        'distribution_lambda': params['prepare']['preproc']['distribution_lambda']
+        'missing_imputer': params['train']['preproc']['missing'],
+        'outliers_removal': params['train']['preproc']['outliers_removal'],
+        'corr_threshold_removal': params['train']['preproc']['corr_threshold'],
+        'distribution_lambda': params['train']['preproc']['distribution_lambda']
     }
 
 

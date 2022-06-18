@@ -1,4 +1,4 @@
-prepare:
+train:
   data:
     train:
       path: data/raw/train.csv
@@ -9,8 +9,9 @@ prepare:
     corr_threshold: null
     outliers_removal: True
     distribution_lambda: 0
-  train:
+  estimator:
     name: RandomForestRegressor
+    grid: False
 dvc:
   auto:
     dir: data/dvc/
