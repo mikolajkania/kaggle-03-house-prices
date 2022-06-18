@@ -19,7 +19,8 @@ class ModelResolver:
         if name == 'LinearRegression':
             return LinearRegression()
         elif name == 'RandomForestRegressor':
-            return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt', n_estimators=1800)
+            return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt',
+                                         n_estimators=1800, random_state=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
