@@ -1,4 +1,6 @@
 import pandas as pd
+import xgboost as xgb
+
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV
@@ -21,6 +23,8 @@ class ModelResolver:
         elif name == 'RandomForestRegressor':
             return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt',
                                          n_estimators=1800, random_state=42)
+        elif name == 'XGBRegressor':
+            return xgb.XGBRegressor(random_state=42, seed=42, booster='dart', max_depth=None, n_estimators=30)
         else:
             raise Exception(f'Unsupported model name={name}')
 
@@ -29,21 +33,40 @@ class ModelResolver:
         if name == 'LinearRegression':
             return LinearRegression()
         elif name == 'RandomForestRegressor':
-            return RandomForestRegressor()
+            return RandomForestRegressor(random_state=42)
+        elif name == 'XGBRegressor':
+            return xgb.XGBRegressor(random_state=42, seed=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
     @staticmethod
     def _grid_param(name: str) -> dict:
-        if name == 'RandomForestRegressor':
+        if name == 'LinearRegression':
+            return {}
+        elif name == 'RandomForestRegressor':
             return {
                 'n_estimators': list(range(100, 2000, 100)),
                 'max_depth': list(range(10, 20, 1)),
                 'min_samples_split': list(range(2, 10, 2)),
                 'min_samples_leaf': list(range(1, 5, 1)),
                 'max_features': ['sqrt', 'log2', 1.0],
-                'bootstrap': [True, False]
+                'bootstrap': [True, False],
+                'random_state': [42]
+
             }
+        elif name == 'XGBRegressor':
+            return {
+                'n_estimators': [90, 80, 70, 60, 50, 40, 30, 20, 10],
+                'max_depth': [None],
+                # 'n_estimators': list(range(100, 2000, 100)),
+                # 'max_depth': [None, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+                'booster': ['gbtree', 'gblinear', 'dart'],
+                'random_state': [42],
+                'seed': [42]
+
+            }
+        else:
+            raise Exception(f'Unsupported model name={name}')
 
 
 class ModelHandler:
