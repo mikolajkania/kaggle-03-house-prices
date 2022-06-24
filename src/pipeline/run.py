@@ -46,20 +46,25 @@ r2_val, rmsle_val = evaluator.metrics(model, X_val, y_val)
 
 # Cross validation
 
-preprocess(X, None, y, preproc_config)
-cv_mean, cv_std, cross_val = evaluator.cv_metrics(model, X, y)
+if params['train']['steps']['cv']:
+    preprocess(X, None, y, preproc_config)
+    cv_mean, cv_std, cross_val = evaluator.cv_metrics(model, X, y)
 
 # Grid search
-if params['train']['estimator']['grid']:
+if params['train']['steps']['grid']:
     model.grid_search(X, y)
 
 # Persisting metrics
 
-evaluator.save_metrics(path=params['dvc']['metrics']['train']['path'], metrics={
+metrics = {
     'r2_train': r2_train,
     'r2_val': r2_val,
     'rmsle_train': rmsle_train,
     'rmsle_val': rmsle_val,
-    'cv_rmsle_mean_score': cv_mean,
-    'cv_rmsle_std': cv_std
-})
+}
+if params['train']['steps']['cv']:
+    metrics['cv_rmsle_mean_score'] = cv_mean
+    metrics['cv_rmsle_std'] = cv_std
+
+evaluator.save_metrics(path=params['dvc']['metrics']['train']['path'], metrics=metrics)
+

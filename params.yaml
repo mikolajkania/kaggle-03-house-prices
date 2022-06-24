@@ -11,6 +11,8 @@ train:
     distribution_lambda: 0
   estimator:
     name: XGBRegressor
+  steps:
+    cv: true
     grid: False
 dvc:
   auto:

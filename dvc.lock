@@ -43,9 +43,12 @@ stages:
     - python src/pipeline/run.py params.yaml
     - python src/pipeline/submission.py params.yaml
     deps:
+    - path: params.yaml
+      md5: a26b07b15924c5773d77e7079beb5abb
+      size: 489
     - path: src
-      md5: afd2a97a499c2b161e86de9887b9e926.dir
-      size: 33099
+      md5: 8af31118e6da3c7ffe6eb0ebc7d0f48e.dir
+      size: 33217
       nfiles: 18
     outs:
     - path: data/dvc/

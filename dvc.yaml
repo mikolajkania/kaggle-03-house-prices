@@ -5,6 +5,7 @@ stages:
       - python src/pipeline/submission.py params.yaml
     deps:
       - src
+      - params.yaml
     outs:
       - data/dvc/
     metrics:
