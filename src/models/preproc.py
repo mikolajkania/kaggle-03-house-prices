@@ -9,6 +9,8 @@ from src.features.encoders import CategoricalEncoder
 from src.features.original import MissingDataHandler, CorrelationHandler, OutliersHandler, DistributionTransformer, \
     FeatureScaler
 
+date_cols = ['YearBuilt', 'YearRemodAdd', 'GarageYrBlt', 'YrSold', 'MoSold']
+
 
 def extract_preproc_config(params: dict):
     return {
@@ -48,10 +50,10 @@ def preprocess(data: pd.DataFrame, val: pd.DataFrame, y: pd.Series, preproc_opti
             correlation.transform(data=val)
 
     scaler = FeatureScaler()
-    scaler.fit(data)
-    scaler.transform(data=data)
+    scaler.fit(data.drop(date_cols, axis=1))
+    scaler.transform(data=data.drop(date_cols, axis=1))
     if val is not None:
-        scaler.transform(data=val)
+        scaler.transform(data=val.drop(date_cols, axis=1))
 
     if preproc_options['distribution_lambda']:
         lmbda = preproc_options['distribution_lambda']
