@@ -7,7 +7,7 @@ sys.path.extend(os.pardir)
 
 from src.features.encoders import CategoricalEncoder
 from src.features.original import MissingDataHandler, CorrelationHandler, OutliersHandler, DistributionTransformer, \
-    FeatureScaler
+    FeatureScaler, BinsTransformer
 
 
 def extract_preproc_config(params: dict):
@@ -15,7 +15,9 @@ def extract_preproc_config(params: dict):
         'missing_imputer': params['train']['preproc']['missing'],
         'outliers_removal': params['train']['preproc']['outliers_removal'],
         'corr_threshold_removal': params['train']['preproc']['corr_threshold'],
-        'distribution_lambda': params['train']['preproc']['distribution_lambda']
+        'distribution_lambda': params['train']['preproc']['distribution_lambda'],
+        'years_bins': params['train']['preproc']['bins_years']['cols'],
+        'years_bins_cnt': params['train']['preproc']['bins_years']['cnt']
     }
 
 
@@ -40,6 +42,13 @@ def preprocess(data: pd.DataFrame, val: pd.DataFrame, y: pd.Series, preproc_opti
         outliers_removal.transform(data=data, verbose=False)
         if val is not None:
             outliers_removal.transform(data=val)
+
+    for col in preproc_options['years_bins']:
+        year_bins = BinsTransformer(col, preproc_options['years_bins_cnt'])
+        year_bins.fit(data)
+        year_bins.transform(data)
+        if val is not None:
+            year_bins.transform(val)
 
     if preproc_options['corr_threshold_removal'] is not None:
         correlation = CorrelationHandler(mode=preproc_options['corr_threshold_removal'], data=data, y=y)
