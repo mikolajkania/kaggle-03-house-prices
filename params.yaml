@@ -9,6 +9,10 @@ train:
     corr_threshold: null
     outliers_removal: True
     distribution_lambda: 0
+    bins_years:
+      cols: ['YearBuilt', 'GarageYrBlt']
+      cnt: 10
+
   estimator:
     name: XGBRegressor
   steps:

@@ -87,8 +87,29 @@ class OutliersHandler:
                 print(f'[Outliers removal] For {col}: skew before={skew_before}, and after={skew_after}')
 
 
+class BinsTransformer:
+    def __init__(self, col: str, bins_cnt: int = 8):
+        self.col = col
+        self.bins_cnt = bins_cnt
+        self.bin_edges = list()
+
+    def fit(self, data: pd.DataFrame):
+        data[self.col] = data[self.col].astype(int)
+        bins = pd.qcut(data[self.col], q=self.bins_cnt, labels=False, precision=0, retbins=True)
+
+        self.bin_edges = list(zip(bins[1], bins[1][1:]))
+
+    def transform(self, data: pd.DataFrame):
+        for idx, edge in enumerate(self.bin_edges):
+            if idx == 0:
+                data.loc[data[self.col] < edge[1], self.col] = idx
+            if idx == len(self.bin_edges) - 1:
+                data.loc[data[self.col] >= edge[0], self.col] = idx
+            else:
+                data.loc[(data[self.col] >= edge[0]) & (data[self.col] < edge[1]), self.col] = idx
+
+
 # TODO should some columns be just boolean?
-# TODO should some columns be replaced with bins?
 # TODO should some columns be joined?
 class FeatureTransformer:
     pass
