@@ -24,7 +24,7 @@ class ModelResolver:
             return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt',
                                          n_estimators=1800, random_state=42)
         elif name == 'XGBRegressor':
-            return xgb.XGBRegressor(random_state=42, seed=42, booster='dart', max_depth=None, n_estimators=30)
+            return xgb.XGBRegressor(random_state=42, seed=42, booster='gbtree', max_depth=None, n_estimators=140, learning_rate=0.1)
         else:
             raise Exception(f'Unsupported model name={name}')
 
@@ -56,14 +56,14 @@ class ModelResolver:
             }
         elif name == 'XGBRegressor':
             return {
-                'n_estimators': [90, 80, 70, 60, 50, 40, 30, 20, 10],
+                'n_estimators': [150, 140, 130, 120, 110, 100, 70, 50, 30],
                 'max_depth': [None],
                 # 'n_estimators': list(range(100, 2000, 100)),
                 # 'max_depth': [None, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
                 'booster': ['gbtree', 'gblinear', 'dart'],
                 'random_state': [42],
-                'seed': [42]
-
+                'seed': [42],
+                'learning_rate': [0.001, 0.01, 0.1, 1]
             }
         else:
             raise Exception(f'Unsupported model name={name}')

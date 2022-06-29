@@ -41,7 +41,8 @@ model = ModelResolver.of(params['train']['estimator']['name'])
 model.fit(X_train, y_train)
 
 evaluator = ModelEvaluator(model)
-evaluator.feature_importance(data=X_train)
+if params['train']['eval']['feature_importance']:
+    evaluator.feature_importance(data=X_train)
 r2_train, rmsle_train = evaluator.metrics(X_train, y_train)
 r2_val, rmsle_val = evaluator.metrics(X_val, y_val)
 
