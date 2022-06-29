@@ -40,15 +40,16 @@ preprocess(X_train, X_val, y_train, preproc_config)
 model = ModelResolver.of(params['train']['estimator']['name'])
 model.fit(X_train, y_train)
 
-evaluator = ModelEvaluator()
-r2_train, rmsle_train = evaluator.metrics(model, X_train, y_train)
-r2_val, rmsle_val = evaluator.metrics(model, X_val, y_val)
+evaluator = ModelEvaluator(model)
+evaluator.feature_importance(data=X_train)
+r2_train, rmsle_train = evaluator.metrics(X_train, y_train)
+r2_val, rmsle_val = evaluator.metrics(X_val, y_val)
 
 # Cross validation
 
 if params['train']['steps']['cv']:
     preprocess(X, None, y, preproc_config)
-    cv_mean, cv_std, cross_val = evaluator.cv_metrics(model, X, y)
+    cv_mean, cv_std, cross_val = evaluator.cv_metrics(X, y)
 
 # Grid search
 if params['train']['steps']['grid']:
@@ -67,4 +68,3 @@ if params['train']['steps']['cv']:
     metrics['cv_rmsle_std'] = cv_std
 
 evaluator.save_metrics(path=params['dvc']['metrics']['train']['path'], metrics=metrics)
-

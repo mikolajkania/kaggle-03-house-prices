@@ -47,8 +47,8 @@ stages:
       md5: 3b41c88c110ca29d384ca8001d1ae3e0
       size: 538
     - path: src
-      md5: 4a9bd4b00af534a953cc1de8542a3c33.dir
-      size: 35722
+      md5: c2522a357f77ba9ea951e87da8c48232.dir
+      size: 36864
       nfiles: 18
     outs:
     - path: data/dvc/

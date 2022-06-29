@@ -33,11 +33,12 @@ preprocess(X, X_pred, y, preproc_config)
 model = ModelResolver.of(params['train']['estimator']['name'])
 model.fit(X, y)
 
-evaluator = ModelEvaluator()
-r2_train, rmsle_train = evaluator.metrics(model, X, y)
+evaluator = ModelEvaluator(model)
+evaluator.feature_importance(X)
+r2_train, rmsle_train = evaluator.metrics(X, y)
 
 evaluator.save_metrics(path=params['dvc']['metrics']['final']['path'], metrics={
     'r2_train': r2_train,
     'rmsle_train': rmsle_train,
 })
-evaluator.kaggle_submission(predict_df, model, X_pred)
+evaluator.kaggle_submission(predict_df, X_pred)

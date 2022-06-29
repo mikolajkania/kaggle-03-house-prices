@@ -10,14 +10,23 @@ from src.models.train import ModelHandler
 
 class ModelEvaluator:
 
-    @staticmethod
-    def metrics(model: ModelHandler, data: pd.DataFrame, y: pd.Series):
-        y_pred = model.get().predict(data)
+    def __init__(self, model: ModelHandler):
+        self.model = model
 
-        r2 = model.get().score(data, y)
+    def metrics(self, data: pd.DataFrame, y: pd.Series):
+        y_pred = self.model.get().predict(data)
+
+        r2 = self.model.get().score(data, y)
         rmsle = mean_squared_log_error(y, y_pred, squared=False)
 
         return r2, rmsle
+
+    def feature_importance(self, data: pd.DataFrame):
+        if hasattr(self.model.get(), 'feature_importances_'):
+            importance = zip(self.model.get().feature_importances_, data.columns)
+            importance_sorted = sorted(importance, key=lambda x: x[0], reverse=True)
+            for score, col in importance_sorted:
+                print('Feature: %s, score: %.5f' % (col, score))
 
     @staticmethod
     def save_metrics(path: str, metrics: dict):
@@ -25,15 +34,13 @@ class ModelEvaluator:
         with open(path, 'w') as f:
             f.write(json.dumps(metrics))
 
-    @staticmethod
-    def cv_metrics(model: ModelHandler, data: pd.DataFrame, y: pd.Series):
-        cv_scores = cross_val_score(model.get(), data, y, scoring='neg_mean_squared_log_error', cv=5)
+    def cv_metrics(self, data: pd.DataFrame, y: pd.Series):
+        cv_scores = cross_val_score(self.model.get(), data, y, scoring='neg_mean_squared_log_error', cv=5)
         cv_scores_adjusted = np.sqrt(-cv_scores)
         return np.mean(cv_scores_adjusted), np.std(cv_scores_adjusted), list(cv_scores_adjusted)
 
-    @staticmethod
-    def kaggle_submission(predict_df: pd.DataFrame, model: ModelHandler, data: pd.DataFrame):
-        y_pred = model.predict(data)
+    def kaggle_submission(self, predict_df: pd.DataFrame, data: pd.DataFrame):
+        y_pred = self.model.predict(data)
 
         output = pd.DataFrame({'Id': predict_df.Id, 'SalePrice': y_pred})
         output.to_csv('submission-next-test.csv', index=False)
