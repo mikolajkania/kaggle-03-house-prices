@@ -34,7 +34,8 @@ model = ModelResolver.of(params['train']['estimator']['name'])
 model.fit(X, y)
 
 evaluator = ModelEvaluator(model)
-evaluator.feature_importance(X)
+if params['train']['eval']['feature_importance']:
+    evaluator.feature_importance(X)
 r2_train, rmsle_train = evaluator.metrics(X, y)
 
 evaluator.save_metrics(path=params['dvc']['metrics']['final']['path'], metrics={

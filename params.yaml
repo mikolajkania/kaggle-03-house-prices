@@ -18,6 +18,8 @@ train:
   steps:
     cv: true
     grid: False
+  eval:
+    feature_importance: False
 dvc:
   auto:
     dir: data/dvc/
