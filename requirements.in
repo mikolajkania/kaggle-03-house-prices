@@ -8,3 +8,4 @@ scipy==1.8.1
 scikit-learn==1.1.1
 # awscli==1.23.4
 xgboost==1.6.1
+lightgbm==3.3.2

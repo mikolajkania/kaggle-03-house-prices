@@ -180,6 +180,8 @@ jupyterlab-widgets==1.1.0
     # via ipywidgets
 kiwisolver==1.4.2
     # via matplotlib
+lightgbm==3.3.2
+    # via -r requirements.in
 mailchecker==4.1.16
     # via python-benedict
 markupsafe==2.1.1
@@ -228,6 +230,7 @@ notebook==6.4.11
 numpy==1.22.3
     # via
     #   -r requirements.in
+    #   lightgbm
     #   matplotlib
     #   pandas
     #   scikit-learn
@@ -336,10 +339,13 @@ ruamel-yaml==0.17.21
 ruamel-yaml-clib==0.2.6
     # via ruamel-yaml
 scikit-learn==1.1.1
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   lightgbm
 scipy==1.8.1
     # via
     #   -r requirements.in
+    #   lightgbm
     #   scikit-learn
     #   xgboost
 scmrepo==0.0.19
@@ -417,6 +423,8 @@ webencodings==0.5.1
     # via
     #   bleach
     #   tinycss2
+wheel==0.37.1
+    # via lightgbm
 widgetsnbextension==3.6.0
     # via ipywidgets
 xgboost==1.6.1

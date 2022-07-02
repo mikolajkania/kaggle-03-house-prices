@@ -1,5 +1,6 @@
 import pandas as pd
 import xgboost as xgb
+from lightgbm import LGBMRegressor
 
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
@@ -11,12 +12,13 @@ class ModelResolver:
     @staticmethod
     def of(name: str):
         return ModelHandler(ModelResolver._final(name),
-                            ModelResolver._grid_estimator(name),
+                            ModelResolver._grid_base_estimator(name),
                             ModelResolver._grid_param(name))
 
     @staticmethod
     def _final(name: str):
         # best results from grid search
+        # TODO ElasticNet from Coursera
 
         if name == 'LinearRegression':
             return LinearRegression()
@@ -24,18 +26,23 @@ class ModelResolver:
             return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt',
                                          n_estimators=1800, random_state=42)
         elif name == 'XGBRegressor':
-            return xgb.XGBRegressor(random_state=42, seed=42, booster='gbtree', max_depth=None, n_estimators=140, learning_rate=0.1)
+            return xgb.XGBRegressor(random_state=42, seed=42, booster='gbtree', max_depth=None,
+                                    n_estimators=140, learning_rate=0.1)
+        elif name == 'LGBMRegressor':
+            return LGBMRegressor(learning_rate=0.01, max_bin=200, max_depth=10, n_estimators=5000, num_leaves=10)
         else:
             raise Exception(f'Unsupported model name={name}')
 
     @staticmethod
-    def _grid_estimator(name: str):
+    def _grid_base_estimator(name: str):
         if name == 'LinearRegression':
             return LinearRegression()
         elif name == 'RandomForestRegressor':
             return RandomForestRegressor(random_state=42)
         elif name == 'XGBRegressor':
             return xgb.XGBRegressor(random_state=42, seed=42)
+        elif name == 'LGBMRegressor':
+            return LGBMRegressor(random_state=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
@@ -52,7 +59,6 @@ class ModelResolver:
                 'max_features': ['sqrt', 'log2', 1.0],
                 'bootstrap': [True, False],
                 'random_state': [42]
-
             }
         elif name == 'XGBRegressor':
             return {
@@ -64,6 +70,25 @@ class ModelResolver:
                 'random_state': [42],
                 'seed': [42],
                 'learning_rate': [0.001, 0.01, 0.1, 1]
+            }
+        elif name == 'LGBMRegressor':
+            return {
+                # 'num_leaves': [4],
+                # 'learning_rate': [0.01],
+                # 'n_estimators': [5000],
+                # 'max_bin': [200]
+
+                'num_leaves': [5, 10, 15, 20, 31],
+                'max_depth': [3, 5, 10, 20, -1],
+                'learning_rate': [0.001, 0.01, 0.1, 1],
+                'n_estimators': [100, 500, 1000, 2000, 5000],
+                'max_bin': [200]
+
+                # 'num_leaves': [3, 5, 7, 10, 12, 15],
+                # 'max_depth': [8, 10, 12, 15, -1],
+                # 'learning_rate': [0.006, 0.01, 0.03],
+                # 'n_estimators': [4000, 5000, 6000],
+                # 'max_bin': [50, 100, 200, 300, 500]
             }
         else:
             raise Exception(f'Unsupported model name={name}')
