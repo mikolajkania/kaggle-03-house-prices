@@ -12,9 +12,8 @@ train:
     bins_years:
       cols: []
       cnt: 0
-
   estimator:
-    name: XGBRegressor
+    name: LGBMRegressor
   steps:
     cv: true
     grid: False
