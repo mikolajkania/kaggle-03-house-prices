@@ -16,7 +16,7 @@ train:
     name: LGBMRegressor
   steps:
     cv: true
-    grid: True
+    grid: False
   eval:
     feature_importance: False
 dvc:

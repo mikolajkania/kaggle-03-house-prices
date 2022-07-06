@@ -29,7 +29,8 @@ class ModelResolver:
             return xgb.XGBRegressor(random_state=42, seed=42, booster='gbtree', max_depth=None,
                                     n_estimators=140, learning_rate=0.1)
         elif name == 'LGBMRegressor':
-            return LGBMRegressor(learning_rate=0.01, max_bin=200, max_depth=10, n_estimators=5000, num_leaves=10)
+            return LGBMRegressor(boosting_type='gbdt', learning_rate=0.006, max_bin=500, max_depth=8,
+                                 n_estimators=6000, num_leaves=10, random_state=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
@@ -73,22 +74,17 @@ class ModelResolver:
             }
         elif name == 'LGBMRegressor':
             return {
-                # 'num_leaves': [4],
-                # 'learning_rate': [0.01],
-                # 'n_estimators': [5000],
-                # 'max_bin': [200]
-
-                'num_leaves': [5, 10, 15, 20, 31],
-                'max_depth': [3, 5, 10, 20, -1],
-                'learning_rate': [0.001, 0.01, 0.1, 1],
-                'n_estimators': [100, 500, 1000, 2000, 5000],
-                'max_bin': [200]
-
-                # 'num_leaves': [3, 5, 7, 10, 12, 15],
-                # 'max_depth': [8, 10, 12, 15, -1],
-                # 'learning_rate': [0.006, 0.01, 0.03],
-                # 'n_estimators': [4000, 5000, 6000],
-                # 'max_bin': [50, 100, 200, 300, 500]
+                'boosting_type': ['gbdt', 'dart'],
+                'num_leaves': [9, 10, 11],
+                'max_depth': [7, 8, 9],
+                'learning_rate': [0.003, 0.006, 0.01],
+                'n_estimators': [1000, 4000, 5000, 6000],
+                'max_bin': [300, 500, 600],
+                'random_state': [42],
+                # from LightGBM tuning docs
+                # 'bagging_freq': [0, 5],
+                # 'bagging_fraction': [1.0, 0.75],
+                # 'bagging_seed': [42]
             }
         else:
             raise Exception(f'Unsupported model name={name}')
