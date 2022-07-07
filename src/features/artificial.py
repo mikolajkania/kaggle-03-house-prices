@@ -9,6 +9,8 @@ class FeatureCreator:
 
         data['TotalUtilityArea_artificial'] = (data['GrLivArea'] + data['TotalBsmtSF'] + data['GarageArea'])
 
+        data['HomeQual_artificial'] = (data['OverallQual'] + data['OverallCond'])
+
     @staticmethod
     def _extend_porch(data: pd.DataFrame):
         data['PorchArea_artificial'] = (data['OpenPorchSF'] + data['EnclosedPorch'] +
