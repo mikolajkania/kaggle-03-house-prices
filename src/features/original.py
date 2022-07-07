@@ -116,6 +116,11 @@ class TypeTransformer:
         data['MSSubClass'] = data['MSSubClass'].astype(str)
         data['OverallQual'] = data['OverallQual'].astype(str)
         data['OverallCond'] = data['OverallCond'].astype(str)
+        # data['YearBuilt'] = data['YearBuilt'].astype(str)
+        # data['YearRemodAdd'] = data['YearRemodAdd'].astype(str)
+        # data['GarageYrBlt'] = data['GarageYrBlt'].astype(str)
+        data['YrSold'] = data['YrSold'].astype(str)
+        data['MoSold'] = data['MoSold'].astype(str)
 
 
 class FeatureScaler:
