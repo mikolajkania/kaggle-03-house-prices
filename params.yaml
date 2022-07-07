@@ -13,6 +13,7 @@ train:
       cols: []
       cnt: 0
     create_features: True
+    transform_types: True
   estimator:
     name: LGBMRegressor
   steps:

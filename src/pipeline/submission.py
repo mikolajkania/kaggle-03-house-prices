@@ -8,6 +8,7 @@ sys.path.extend(os.pardir)
 from src.data.handlers import CSVLoader
 from src.models.train import ModelResolver
 from src.models.evaluators import ModelEvaluator
+from src.features.original import TypeTransformer
 from src.models.preproc import preprocess, extract_preproc_config
 from src.features.artificial import FeatureCreator
 
@@ -29,6 +30,11 @@ if params['train']['preproc']['create_features']:
     features = FeatureCreator()
     features.create_new(data=all_df)
     features.create_new(data=X_pred)
+
+if params['train']['preproc']['transform_types']:
+    typeTrans = TypeTransformer()
+    typeTrans.transform(data=all_df)
+    typeTrans.transform(data=X_pred)
 
 y = all_df['SalePrice']
 X = all_df.drop(columns=['Id', 'SalePrice'], axis=1)
