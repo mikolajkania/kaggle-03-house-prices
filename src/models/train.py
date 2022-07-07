@@ -74,12 +74,12 @@ class ModelResolver:
             }
         elif name == 'LGBMRegressor':
             return {
-                'boosting_type': ['gbdt', 'dart'],
+                'boosting_type': ['gbdt'],
                 'num_leaves': [9, 10, 11],
                 'max_depth': [7, 8, 9],
-                'learning_rate': [0.003, 0.006, 0.01],
-                'n_estimators': [1000, 4000, 5000, 6000],
-                'max_bin': [300, 500, 600],
+                'learning_rate': [0.006, 0.01],
+                'n_estimators': [5000, 6000],
+                'max_bin': [400, 500, 600],
                 'random_state': [42],
                 # from LightGBM tuning docs
                 # 'bagging_freq': [0, 5],

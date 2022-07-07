@@ -12,6 +12,7 @@ train:
     bins_years:
       cols: []
       cnt: 0
+    create_features: True
   estimator:
     name: LGBMRegressor
   steps:
