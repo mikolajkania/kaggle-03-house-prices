@@ -109,10 +109,15 @@ class BinsTransformer:
                 data.loc[(data[self.col] >= edge[0]) & (data[self.col] < edge[1]), self.col] = idx
 
 
-# TODO should some columns be just boolean?
-# TODO should some columns be joined?
-class FeatureTransformer:
-    pass
+class TypeTransformer:
+
+    @staticmethod
+    def transform(data: pd.DataFrame):
+        data['MSSubClass'] = data['MSSubClass'].astype(str)
+        data['OverallQual'] = data['OverallQual'].astype(str)
+        data['OverallCond'] = data['OverallCond'].astype(str)
+        data['YrSold'] = data['YrSold'].astype(str)
+        data['MoSold'] = data['MoSold'].astype(str)
 
 
 class FeatureScaler:
