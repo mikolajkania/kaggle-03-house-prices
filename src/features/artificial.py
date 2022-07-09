@@ -12,3 +12,5 @@ class FeatureCreator:
                                                 data['GarageArea'])
 
         data['HomeQual_artificial'] = (data['OverallQual'] + data['OverallCond'])
+
+        data['OtherRoomsAbvGr_artificial'] = data['TotRmsAbvGrd'] - data['KitchenAbvGr'] - data['BedroomAbvGr']
