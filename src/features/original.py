@@ -116,6 +116,7 @@ class TypeTransformer:
         data['MSSubClass'] = data['MSSubClass'].astype(str)
         data['OverallQual'] = data['OverallQual'].astype(str)
         data['OverallCond'] = data['OverallCond'].astype(str)
+        # only those date fields improved results
         data['YrSold'] = data['YrSold'].astype(str)
         data['MoSold'] = data['MoSold'].astype(str)
 
