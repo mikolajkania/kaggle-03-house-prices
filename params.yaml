@@ -15,9 +15,9 @@ train:
     create_features: True
     transform_types: True
   estimator:
-    name: LGBMRegressor
+    name: Ridge
   steps:
-    cv: true
+    cv: True
     grid: False
   eval:
     feature_importance: False

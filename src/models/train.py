@@ -2,6 +2,7 @@ import pandas as pd
 import xgboost as xgb
 from lightgbm import LGBMRegressor
 
+from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV
@@ -18,8 +19,6 @@ class ModelResolver:
     @staticmethod
     def _final(name: str):
         # best results from grid search
-        # TODO ElasticNet from Coursera
-
         if name == 'LinearRegression':
             return LinearRegression()
         elif name == 'RandomForestRegressor':
@@ -31,6 +30,8 @@ class ModelResolver:
         elif name == 'LGBMRegressor':
             return LGBMRegressor(boosting_type='gbdt', learning_rate=0.006, max_bin=500, max_depth=8,
                                  n_estimators=6000, num_leaves=10, random_state=42)
+        elif name == 'Ridge':
+            return Ridge(alpha=3, solver='sag', tol=0.01, random_state=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
@@ -44,6 +45,8 @@ class ModelResolver:
             return xgb.XGBRegressor(random_state=42, seed=42)
         elif name == 'LGBMRegressor':
             return LGBMRegressor(random_state=42)
+        elif name == 'Ridge':
+            return Ridge(random_state=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
@@ -85,6 +88,15 @@ class ModelResolver:
                 # 'bagging_freq': [0, 5],
                 # 'bagging_fraction': [1.0, 0.75],
                 # 'bagging_seed': [42]
+            }
+        elif name == 'Ridge':
+            return {
+                # 'alpha': [0.001, 0.01, 0.1, 1.0, 10],
+                # 'tol': [0.1, 0.01, 0.001, 0.001],
+                'alpha': [1.0, 1.5, 3],
+                'tol': [0.006, 0.01, 0.03],
+                'solver': ['svd', 'cholesky', 'lsqr', 'sparse_cg', 'lsqr', 'sag', 'lbfgs'],
+                'random_state': [42]
             }
         else:
             raise Exception(f'Unsupported model name={name}')
