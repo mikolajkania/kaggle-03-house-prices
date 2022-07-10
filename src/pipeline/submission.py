@@ -42,7 +42,7 @@ X = all_df.drop(columns=['Id', 'SalePrice'], axis=1)
 preproc_config = extract_preproc_config(params)
 preprocess(X, X_pred, y, preproc_config)
 
-model = ModelResolver.of(params['train']['estimator']['name'])
+model = ModelResolver.of(estimator=params['train']['estimator'])
 model.fit(X, y)
 
 evaluator = ModelEvaluator(model)

@@ -47,7 +47,7 @@ preproc_config = extract_preproc_config(params)
 print(f'Options used for preprocessing: {preproc_config}')
 preprocess(X_train, X_val, y_train, preproc_config)
 
-model = ModelResolver.of(params['train']['estimator']['name'])
+model = ModelResolver.of(estimator=params['train']['estimator'])
 model.fit(X_train, y_train)
 
 evaluator = ModelEvaluator(model)

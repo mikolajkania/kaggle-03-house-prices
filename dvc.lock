@@ -44,17 +44,77 @@ stages:
     - python src/pipeline/submission.py params.yaml
     deps:
     - path: params.yaml
-      md5: 1abd7921b49f1d2c47e426293a0b72cf
-      size: 631
+      md5: 0e93dca49090464edb4c8d7defb189f6
+      size: 761
     - path: src
-      md5: 8fe4d7aacab22cbad52413dda77a6f10.dir
-      size: 42473
+      md5: 40744f93d50c69d8070e86aa0e9e3364.dir
+      size: 43559
       nfiles: 20
+    params:
+      params.yaml:
+        train.estimator.parameters.booster: gbtree
+        train.estimator.parameters.lr: 0.1
+        train.estimator.parameters.max_depth: 5
+        train.estimator.parameters.n_est: 1000
     outs:
     - path: data/dvc/
       md5: d751713988987e9331980363e24189ce.dir
       size: 0
       nfiles: 0
     - path: models/metrics-train.json
-      md5: 978ac620fee37e4f01835ba3da3ad89a
-      size: 214
+      md5: 69f324134854909df97f26f41b61e598
+      size: 216
+  kagglfy:
+    cmd:
+    - python src/pipeline/run.py params.yaml
+    - python src/pipeline/submission.py params.yaml
+    deps:
+    - path: params.yaml
+      md5: 0e93dca49090464edb4c8d7defb189f6
+      size: 761
+    - path: src
+      md5: 40744f93d50c69d8070e86aa0e9e3364.dir
+      size: 43559
+      nfiles: 20
+    params:
+      params.yaml:
+        train.estimator.parameters.booster: gbtree
+        train.estimator.parameters.lr: 0.1
+        train.estimator.parameters.max_depth: 5
+        train.estimator.parameters.n_est: 1000
+    outs:
+    - path: data/dvc/
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
+    - path: models/metrics-train.json
+      md5: 69f324134854909df97f26f41b61e598
+      size: 216
+  kaggle:
+    cmd:
+    - python src/pipeline/run.py params.yaml
+    - python src/pipeline/submission.py params.yaml
+    deps:
+    - path: params.yaml
+      md5: 9d27fba3dd399e95763b88ecb517c0a1
+      size: 726
+      isexec: true
+    - path: src
+      md5: 6724177b71613c84e5787fa1b0a8db95.dir
+      size: 43459
+      nfiles: 20
+    params:
+      params.yaml:
+        train.estimator.parameters.booster: gbtree
+        train.estimator.parameters.lr: 0.1
+        train.estimator.parameters.max_depth: 5
+        train.estimator.parameters.n_est: 500
+    outs:
+    - path: data/dvc/
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
+    - path: models/metrics-train.json
+      md5: 3be8171e925a8ef0910c7db80bbc3a87
+      size: 216
+      isexec: true
