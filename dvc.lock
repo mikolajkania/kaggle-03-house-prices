@@ -96,7 +96,7 @@ stages:
     - python src/pipeline/submission.py params.yaml
     deps:
     - path: params.yaml
-      md5: 9d27fba3dd399e95763b88ecb517c0a1
+      md5: ca9904ae94ac58a06fa336578337c271
       size: 726
       isexec: true
     - path: src
@@ -108,13 +108,13 @@ stages:
         train.estimator.parameters.booster: gbtree
         train.estimator.parameters.lr: 0.1
         train.estimator.parameters.max_depth: 5
-        train.estimator.parameters.n_est: 500
+        train.estimator.parameters.n_est: 600
     outs:
     - path: data/dvc/
       md5: d751713988987e9331980363e24189ce.dir
       size: 0
       nfiles: 0
     - path: models/metrics-train.json
-      md5: 3be8171e925a8ef0910c7db80bbc3a87
-      size: 216
+      md5: 92361c0f4bf5080ab7b9050c1a03e81b
+      size: 215
       isexec: true
