@@ -11,27 +11,25 @@ from sklearn.model_selection import GridSearchCV
 class ModelResolver:
 
     @staticmethod
-    def of(estimator: dict):
-        name = estimator['name']
-        params = estimator['parameters']
-        return ModelHandler(ModelResolver._final(name, params),
+    def of(name: dict):
+        return ModelHandler(ModelResolver._final(name),
                             ModelResolver._grid_base_estimator(name),
                             ModelResolver._grid_param(name))
 
     @staticmethod
-    def _final(name: str, params: dict):
+    def _final(name: str):
         if name == 'XGBRegressor':
-            return xgb.XGBRegressor(booster=params['booster'], max_depth=params['max_depth'],
-                                    n_estimators=params['n_est'], learning_rate=params['lr'],
+            return xgb.XGBRegressor(booster='gbtree', max_depth=5,
+                                    n_estimators=450, learning_rate=0.1,
                                     random_state=42, seed=42)
+        elif name == 'LGBMRegressor':
+            return LGBMRegressor(boosting_type='gbdt', learning_rate=0.006, max_bin=500, max_depth=8,
+                                    n_estimators=6000, num_leaves=10, random_state=42)
         elif name == 'LinearRegression':
             return LinearRegression()
         elif name == 'RandomForestRegressor':
             return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt',
                                     n_estimators=1800, random_state=42)
-        elif name == 'LGBMRegressor':
-            return LGBMRegressor(boosting_type='gbdt', learning_rate=0.006, max_bin=500, max_depth=8,
-                                    n_estimators=6000, num_leaves=10, random_state=42)
         elif name == 'Ridge':
             return Ridge(alpha=3, solver='sag', tol=0.01, random_state=42)
         else:

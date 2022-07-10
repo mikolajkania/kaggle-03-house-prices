@@ -3,11 +3,6 @@ stages:
     cmd:
       - python src/pipeline/run.py params.yaml
       - python src/pipeline/submission.py params.yaml
-    params:
-      - train.estimator.parameters.n_est
-      - train.estimator.parameters.lr
-      - train.estimator.parameters.booster
-      - train.estimator.parameters.max_depth
     deps:
       - src
       - params.yaml
