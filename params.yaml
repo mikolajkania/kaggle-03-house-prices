@@ -15,7 +15,14 @@ train:
     create_features: True
     transform_types: True
   estimator:
-    name: LGBMRegressor
+    name: XGBRegressor
+    parameters:
+      n_est: 450
+      lr: 0.1
+      booster: gbtree
+      max_depth: 5
+      random_state: 42
+      seed: 42
   steps:
     cv: True
     grid: False

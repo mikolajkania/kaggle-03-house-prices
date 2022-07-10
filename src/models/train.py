@@ -11,25 +11,27 @@ from sklearn.model_selection import GridSearchCV
 class ModelResolver:
 
     @staticmethod
-    def of(name: str):
-        return ModelHandler(ModelResolver._final(name),
+    def of(estimator: dict):
+        name = estimator['name']
+        params = estimator['parameters']
+        return ModelHandler(ModelResolver._final(name, params),
                             ModelResolver._grid_base_estimator(name),
                             ModelResolver._grid_param(name))
 
     @staticmethod
-    def _final(name: str):
-        # best results from grid search
-        if name == 'LinearRegression':
+    def _final(name: str, params: dict):
+        if name == 'XGBRegressor':
+            return xgb.XGBRegressor(booster=params['booster'], max_depth=params['max_depth'],
+                                    n_estimators=params['n_est'], learning_rate=params['lr'],
+                                    random_state=42, seed=42)
+        elif name == 'LinearRegression':
             return LinearRegression()
         elif name == 'RandomForestRegressor':
             return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt',
-                                         n_estimators=1800, random_state=42)
-        elif name == 'XGBRegressor':
-            return xgb.XGBRegressor(random_state=42, seed=42, booster='gbtree', max_depth=None,
-                                    n_estimators=140, learning_rate=0.1)
+                                    n_estimators=1800, random_state=42)
         elif name == 'LGBMRegressor':
             return LGBMRegressor(boosting_type='gbdt', learning_rate=0.006, max_bin=500, max_depth=8,
-                                 n_estimators=6000, num_leaves=10, random_state=42)
+                                    n_estimators=6000, num_leaves=10, random_state=42)
         elif name == 'Ridge':
             return Ridge(alpha=3, solver='sag', tol=0.01, random_state=42)
         else:
@@ -66,14 +68,14 @@ class ModelResolver:
             }
         elif name == 'XGBRegressor':
             return {
-                'n_estimators': [150, 140, 130, 120, 110, 100, 70, 50, 30],
-                'max_depth': [None],
-                # 'n_estimators': list(range(100, 2000, 100)),
-                # 'max_depth': [None, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-                'booster': ['gbtree', 'gblinear', 'dart'],
+                # 'n_estimators': [150, 140, 130, 120, 110, 100, 70, 50, 30],
+                # 'max_depth': [None],
+                'n_estimators': list(range(100, 6200, 500)),
+                'max_depth': [None, 5],
+                'booster': ['gbtree'],
                 'random_state': [42],
                 'seed': [42],
-                'learning_rate': [0.001, 0.01, 0.1, 1]
+                'learning_rate': [0.01, 0.03, 0.06, 0.1, 0.3]
             }
         elif name == 'LGBMRegressor':
             return {
@@ -117,11 +119,22 @@ class ModelHandler:
 
     def grid_search(self, data: pd.DataFrame, y: pd.Series) -> None:
         print('Grid search started')
-        grid = GridSearchCV(self.grid_estimator, self.grid_param, cv=4, n_jobs=6, verbose=10)
+        grid = GridSearchCV(self.grid_estimator, self.grid_param, cv=4, n_jobs=4, verbose=10)
         found = grid.fit(data, y)
         print(f'Best cv score={found.best_score_}')
         print(f'Best cv params={found.best_params_}')
         print(f'Best cv estimator={found.best_estimator_}')
+
+        print('\n\n')
+        print('Best parameters set found on development set:')
+        print(grid.best_params_)
+        print()
+        print('Grid scores on development set:')
+        means = grid.cv_results_['mean_test_score']
+        stds = grid.cv_results_['std_test_score']
+        for mean, std, params in zip(means, stds, grid.cv_results_['params']):
+            print('%0.3f (+/-%0.03f) for %r' % (mean, std * 2, params))
+        print()
 
     def get(self):
         return self.final_estimator

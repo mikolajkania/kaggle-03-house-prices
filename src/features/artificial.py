@@ -5,6 +5,8 @@ class FeatureCreator:
 
     @staticmethod
     def create_new(data: pd.DataFrame):
+        # other combinations are not increasing the results
+
         data['PorchArea_artificial'] = (data['OpenPorchSF'] + data['EnclosedPorch'] +
                                         data['3SsnPorch'] + data['ScreenPorch'])
 
