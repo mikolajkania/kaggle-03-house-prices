@@ -45,7 +45,7 @@ preprocess(X, X_pred, y, preproc_config)
 model = ModelResolver.of(name=params['train']['estimator']['name'])
 model.fit(X, y)
 
-evaluator = ModelEvaluator(model)
+evaluator = ModelEvaluator(model.get())
 if params['train']['eval']['feature_importance']:
     evaluator.feature_importance(X)
 r2_train, rmsle_train = evaluator.metrics(X, y)
