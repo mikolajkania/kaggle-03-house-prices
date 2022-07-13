@@ -15,7 +15,7 @@ train:
     create_features: True
     transform_types: True
   estimator:
-    name: XGBRegressor
+    name: LGBMRegressor
   steps:
     cv: True
     grid: False
