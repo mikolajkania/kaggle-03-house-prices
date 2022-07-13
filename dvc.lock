@@ -96,12 +96,11 @@ stages:
     - python src/pipeline/submission.py params.yaml
     deps:
     - path: params.yaml
-      md5: 21f1957f4da442812113f67894169afb
-      size: 600
-      isexec: true
+      md5: 756990cc4e024d8add0dc2eba779934e
+      size: 633
     - path: src
-      md5: 1afc06ec8ff04ba7f43fcc7dce32d4c7.dir
-      size: 44225
+      md5: 97b703f312d778f03fef23f36166ceaa.dir
+      size: 44813
       nfiles: 20
     outs:
     - path: data/dvc/
@@ -109,6 +108,6 @@ stages:
       size: 0
       nfiles: 0
     - path: models/metrics-train.json
-      md5: 9c150f32b922a1a5323839e6ab267c4c
-      size: 214
+      md5: 5e4a05e6e9ec499c9d4194df9b23b717
+      size: 213
       isexec: true
