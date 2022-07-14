@@ -17,9 +17,9 @@ train:
   estimator:
     names:
       - Ridge
-      - LGBMRegressor
       - XGBRegressor
-#      - RandomForestRegressor
+      - LGBMRegressor
+      - RandomForestRegressor
 #      - LinearRegression
   steps:
     cv: True
