@@ -54,7 +54,8 @@ else:
         model = ModelResolver.of(name=est).get()
         estimators.append((est, model))
     stacked_reg = StackingRegressor(estimators=estimators[1:],
-                                    final_estimator=estimators[0][1])
+                                    final_estimator=estimators[0][1],
+                                    passthrough=True)
     stacked_reg.fit(X, y)
 
 # evaluator = ModelEvaluator(model.get())
