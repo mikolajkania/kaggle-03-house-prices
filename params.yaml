@@ -15,7 +15,12 @@ train:
     create_features: True
     transform_types: True
   estimator:
-    name: LGBMRegressor
+    names:
+      - Ridge
+      - LGBMRegressor
+      - XGBRegressor
+#      - RandomForestRegressor
+#      - LinearRegression
   steps:
     cv: True
     grid: False

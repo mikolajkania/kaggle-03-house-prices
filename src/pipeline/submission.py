@@ -12,6 +12,8 @@ from src.features.original import TypeTransformer
 from src.models.preproc import preprocess, extract_preproc_config
 from src.features.artificial import FeatureCreator
 
+from sklearn.ensemble import StackingRegressor
+
 # PARAMS
 
 params_path = sys.argv[1]
@@ -42,10 +44,21 @@ X = all_df.drop(columns=['Id', 'SalePrice'], axis=1)
 preproc_config = extract_preproc_config(params)
 preprocess(X, X_pred, y, preproc_config)
 
-model = ModelResolver.of(name=params['train']['estimator']['name'])
-model.fit(X, y)
+estimators_names = params['train']['estimator']['names']
+if len(estimators_names) == 0:
+    model = ModelResolver.of(name=estimators_names[0])
+    model.fit(X, y)
+else:
+    estimators = []
+    for est in estimators_names:
+        model = ModelResolver.of(name=est).get()
+        estimators.append((est, model))
+    stacked_reg = StackingRegressor(estimators=estimators[1:],
+                                    final_estimator=estimators[0][1])
+    stacked_reg.fit(X, y)
 
-evaluator = ModelEvaluator(model.get())
+# evaluator = ModelEvaluator(model.get())
+evaluator = ModelEvaluator(stacked_reg)
 if params['train']['eval']['feature_importance']:
     evaluator.feature_importance(X)
 r2_train, rmsle_train = evaluator.metrics(X, y)
