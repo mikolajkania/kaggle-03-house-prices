@@ -58,7 +58,7 @@ else:
     #                                 final_estimator=estimators[0][1],
     #                                 passthrough=False)
     vote_reg = VotingRegressor(estimators=estimators,
-                               weights=[0.1, 0.5, 0.35, 0.05])
+                               weights=[0.1, 0.55, 0.3, 0.05])
     vote_reg.fit(X, y)
     evaluator = ModelEvaluator(vote_reg)
 
