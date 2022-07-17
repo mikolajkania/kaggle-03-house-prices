@@ -13,6 +13,8 @@ from src.features.artificial import FeatureCreator
 from src.features.splitters import DataSplitter
 from src.models.evaluators import ModelEvaluator
 
+from sklearn.ensemble import StackingRegressor
+
 # PARAMS
 
 params_path = sys.argv[1]
@@ -47,10 +49,22 @@ preproc_config = extract_preproc_config(params)
 print(f'Options used for preprocessing: {preproc_config}')
 preprocess(X_train, X_val, y_train, preproc_config)
 
-model = ModelResolver.of(name=params['train']['estimator']['name'])
-model.fit(X_train, y_train)
+estimators_names = params['train']['estimator']['names']
+if len(estimators_names) == 1:
+    model = ModelResolver.of(name=estimators_names[0])
+    model.fit(X_train, y_train)
+    evaluator = ModelEvaluator(model.get())
+else:
+    estimators = []
+    for est in estimators_names:
+        model = ModelResolver.of(name=est).get()
+        estimators.append((est, model))
+    stacked_reg = StackingRegressor(estimators=estimators[1:],
+                                    final_estimator=estimators[0][1],
+                                    passthrough=True)
+    stacked_reg.fit(X_train, y_train)
+    evaluator = ModelEvaluator(stacked_reg)
 
-evaluator = ModelEvaluator(model.get())
 if params['train']['eval']['feature_importance']:
     evaluator.feature_importance(data=X_train)
 r2_train, rmsle_train = evaluator.metrics(X_train, y_train)
