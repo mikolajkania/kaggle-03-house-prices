@@ -12,7 +12,7 @@ from src.features.original import TypeTransformer
 from src.models.preproc import preprocess, extract_preproc_config
 from src.features.artificial import FeatureCreator
 
-from sklearn.ensemble import StackingRegressor
+from sklearn.ensemble import StackingRegressor, VotingRegressor
 
 # PARAMS
 
@@ -54,11 +54,13 @@ else:
     for est in estimators_names:
         model = ModelResolver.of(name=est).get()
         estimators.append((est, model))
-    stacked_reg = StackingRegressor(estimators=estimators[1:],
-                                    final_estimator=estimators[0][1],
-                                    passthrough=True)
-    stacked_reg.fit(X, y)
-    evaluator = ModelEvaluator(stacked_reg)
+    # stacked_reg = StackingRegressor(estimators=estimators[1:],
+    #                                 final_estimator=estimators[0][1],
+    #                                 passthrough=False)
+    vote_reg = VotingRegressor(estimators=estimators,
+                               weights=[0.1, 0.3, 0.4, 0.2])
+    vote_reg.fit(X, y)
+    evaluator = ModelEvaluator(vote_reg)
 
 if params['train']['eval']['feature_importance']:
     evaluator.feature_importance(X)
