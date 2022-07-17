@@ -16,11 +16,13 @@ train:
     transform_types: True
   estimator:
     names:
-      - Ridge
+      - RidgeCV
       - XGBRegressor
       - LGBMRegressor
       - RandomForestRegressor
-#      - LinearRegression
+#      - LassoCV
+#      - ElasticNet
+#     - LinearRegression
   steps:
     cv: True
     grid: False

@@ -50,9 +50,10 @@ print(f'Options used for preprocessing: {preproc_config}')
 preprocess(X_train, X_val, y_train, preproc_config)
 
 estimators_names = params['train']['estimator']['names']
-if len(estimators_names) == 0:
+if len(estimators_names) == 1:
     model = ModelResolver.of(name=estimators_names[0])
     model.fit(X_train, y_train)
+    evaluator = ModelEvaluator(model.get())
 else:
     estimators = []
     for est in estimators_names:
@@ -62,9 +63,8 @@ else:
                                     final_estimator=estimators[0][1],
                                     passthrough=True)
     stacked_reg.fit(X_train, y_train)
+    evaluator = ModelEvaluator(stacked_reg)
 
-# evaluator = ModelEvaluator(model.get())
-evaluator = ModelEvaluator(stacked_reg)
 if params['train']['eval']['feature_importance']:
     evaluator.feature_importance(data=X_train)
 r2_train, rmsle_train = evaluator.metrics(X_train, y_train)
