@@ -98,10 +98,9 @@ stages:
     - path: params.yaml
       md5: 9bd8405ee90edf872e7e0581d0aeec49
       size: 778
-      isexec: true
     - path: src
-      md5: 9e9a435395efcff5fbfedd4835720e40.dir
-      size: 47522
+      md5: a55c74e171543fbecc3acd15976301a3.dir
+      size: 47743
       nfiles: 20
     outs:
     - path: data/dvc/
@@ -109,6 +108,6 @@ stages:
       size: 0
       nfiles: 0
     - path: models/metrics-train.json
-      md5: 16879372aae91ec5c805501bece4afce
-      size: 213
+      md5: 07462126c23d1e60621c25a98863c2b9
+      size: 214
       isexec: true
