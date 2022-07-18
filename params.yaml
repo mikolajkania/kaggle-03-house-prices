@@ -7,7 +7,7 @@ train:
   preproc:
     missing: most_frequent
     corr_threshold: null
-    outliers_removal: True
+    outliers_removal: False
     distribution_lambda: 0
     bins_years:
       cols: []
