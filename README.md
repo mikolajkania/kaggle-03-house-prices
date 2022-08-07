@@ -29,5 +29,5 @@ Notable results based on few popular algorithms can be found below (the lower, t
 |               LightGBM                |        0.12995 |              0.13199 |       exp-lgbm        |
 |    XGBoost - learning rate tuning     |        0.13692 |              0.14386 | exp-xgb-learning-rate |
 |                XGBoost                |        0.13692 |              0.14386 |        exp-xgb        |
-|            Random Forests             |        0.14055 |              0.14455 |         Main          |
-|          Logistic regression          |        0.15459 |              0.34370 |         Main          |
+|            Random Forests             |        0.14055 |              0.14455 |         main          |
+|          Logistic regression          |        0.15459 |              0.34370 |         main          |
