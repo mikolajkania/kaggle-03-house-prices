@@ -1,3 +1,6 @@
+# Blog post
+https://mikolajkania.com/2022/08/07/dvc-kaggle-mlops/
+
 # kaggle-03-house-prices
 - https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/overview
 
