@@ -44,3 +44,13 @@ class ModelEvaluator:
         output.to_csv('submission-next-test.csv', index=False)
 
         print('Submission created.')
+
+    def model_diff(self, data: pd.DataFrame, y: pd.Series):
+        y_pred = self.model.predict(data)
+        result = pd.DataFrame(
+            {
+                'y_pred': y_pred,
+                'y': y
+            }
+        )
+        result.to_csv('model_diff.csv', encoding='utf-8')

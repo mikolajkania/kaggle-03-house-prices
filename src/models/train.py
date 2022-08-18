@@ -1,6 +1,8 @@
+import os
 import numpy as np
 import pandas as pd
 import xgboost as xgb
+from joblib import dump, load
 from lightgbm import LGBMRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression, Ridge, RidgeCV, LassoCV
@@ -22,21 +24,21 @@ class ModelResolver:
                                     booster='gbtree', seed=42, random_state=42)
         elif name == 'LGBMRegressor':
             return LGBMRegressor(boosting_type='gbdt', learning_rate=0.01, max_bin=200, max_depth=-1,
-                                    reg_alpha=0.006, n_estimators=6000, num_leaves=5,
-                                    bagging_fraction=0.75, bagging_freq=10, bagging_seed=42,
-                                    random_state=42)
+                                 reg_alpha=0.006, n_estimators=6000, num_leaves=5,
+                                 bagging_fraction=0.75, bagging_freq=10, bagging_seed=42,
+                                 random_state=42)
         elif name == 'LinearRegression':
             return LinearRegression()
         elif name == 'RandomForestRegressor':
             return RandomForestRegressor(bootstrap=False, max_depth=19, max_features='sqrt',
-                                            n_estimators=1800, random_state=42)
+                                         n_estimators=1800, random_state=42)
         elif name == 'Ridge':
             return Ridge(alpha=3, solver='sag', tol=0.01, random_state=42)
         elif name == 'RidgeCV':
             return RidgeCV(alphas=[0.0001, 0.001, 0.01, 0.1, 1, 10, 100], cv=5)
         elif name == 'LassoCV':
             return LassoCV(n_alphas=100, max_iter=1000, selection='cyclic',
-                            tol=0.00001, cv=5, random_state=42)
+                           tol=0.00001, cv=5, random_state=42)
         else:
             raise Exception(f'Unsupported model name={name}')
 
@@ -117,9 +119,9 @@ class ModelResolver:
         elif name == 'RidgeCV':
             return {
                 'alphas': [(0.1, 1.0, 10.0),
-                            (0.01, 0.1, 1.0, 10.0, 100.0),
-                            (0.01, 0.1, 1.0, 10.0, 20, 50, 100.0),
-                            (0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0)]
+                           (0.01, 0.1, 1.0, 10.0, 100.0),
+                           (0.01, 0.1, 1.0, 10.0, 20, 50, 100.0),
+                           (0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0)]
             }
         elif name == 'LassoCV':
             return {
@@ -179,3 +181,16 @@ class ModelHandler:
 
     def get(self):
         return self.final_estimator
+
+
+class ModelUtils:
+
+    @staticmethod
+    def save(model):
+        dump(model, 'model.joblib')
+        print('Model saved')
+
+    @staticmethod
+    def load(model_dir: str = ''):
+        print('Model loaded')
+        return load(os.path.join(model_dir, 'model.joblib'))

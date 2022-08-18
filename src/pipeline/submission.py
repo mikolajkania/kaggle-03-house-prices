@@ -1,12 +1,12 @@
 import os
-import sys
 
+import sys
 import yaml
 
 sys.path.extend(os.pardir)
 
 from src.data.handlers import CSVLoader
-from src.models.train import ModelResolver
+from src.models.train import ModelResolver, ModelHandler, ModelUtils
 from src.models.evaluators import ModelEvaluator
 from src.features.original import TypeTransformer
 from src.models.preproc import preprocess, extract_preproc_config
@@ -46,7 +46,7 @@ preprocess(X, X_pred, y, preproc_config)
 
 estimators_names = params['train']['estimator']['names']
 if len(estimators_names) == 1:
-    model = ModelResolver.of(name=estimators_names[0])
+    model: ModelHandler = ModelResolver.of(name=estimators_names[0])
     model.fit(X, y)
     evaluator = ModelEvaluator(model.get())
 else:
@@ -61,6 +61,11 @@ else:
                                weights=[0.1, 0.55, 0.3, 0.05])
     vote_reg.fit(X, y)
     evaluator = ModelEvaluator(vote_reg)
+    evaluator.model_diff(X, y)
+
+    persister = ModelUtils()
+    persister.save(vote_reg)
+
 
 if params['train']['eval']['feature_importance']:
     evaluator.feature_importance(X)
